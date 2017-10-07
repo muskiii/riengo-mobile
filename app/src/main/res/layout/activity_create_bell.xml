@@ -7,14 +7,14 @@
     tools:context="com.example.juanma.riengo.main.activities.CreateBellActivity">
 
     <LinearLayout
-        android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -22,13 +22,12 @@
                 android:id="@+id/bell_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Bell name:"
+                android:text="@string/bell_name_label"
                 android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/bell_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
@@ -45,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Expires in:"
+                android:text="@string/expires_in_label"
                 android:textSize="20sp" />
 
             <EditText
@@ -60,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="hours"
+                android:text="@string/hours"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -69,6 +68,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="createBell"
-            android:text="Create Bell" />
+            android:text="@string/create_bell" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

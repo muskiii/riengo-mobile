@@ -27,10 +27,12 @@ public class ListBellsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("testas");
         setContentView(R.layout.activity_list_bells);
+        System.out.println("test");
         new GetBellsOperation().execute();
-    }
 
+    }
 
     public String readContent() throws IOException {
 
@@ -42,33 +44,32 @@ public class ListBellsActivity extends AppCompatActivity {
     private class GetBellsOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            //return readContent();
+            String result = null;
             try {
-                return readContent();
+                result = readContent();
+                return result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //  return postContent(params[0]);
-            return "error";
+            return result;
         }
-
-        @Override
+            @Override
         protected void onPostExecute(String result) {
-            System.out.println(result);
-            try {
-                List<Bell> bellList = Bell.parseBells(result);
-                List<String> bellsNames = Bell.bellsToListString(bellList);
-                ListView bellsListView = (ListView) findViewById(R.id.bellsListView);
+                try {
+                    List<Bell> bellList = null;
+                    bellList = Bell.parseBells(result);
+                    List<String> bellsNames = Bell.bellsToListString(bellList);
+                    ListView bellsListView = (ListView) findViewById(R.id.bellsListView);
 
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                        ListBellsActivity.this,
-                        android.R.layout.simple_list_item_1,
-                        bellsNames );
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                            ListBellsActivity.this,
+                            android.R.layout.simple_list_item_1,
+                            bellsNames );
+                    bellsListView.setAdapter(arrayAdapter);
 
-                bellsListView.setAdapter(arrayAdapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
         }
 
         @Override

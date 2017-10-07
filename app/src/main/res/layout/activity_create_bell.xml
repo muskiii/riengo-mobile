@@ -14,14 +14,6 @@
         tools:layout_editor_absoluteY="8dp">
 
         <EditText
-            android:id="@+id/editText3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
-
-        <EditText
             android:id="@+id/editText2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,5 +28,11 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Expiration time" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Bell" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
 import com.example.juanma.riengo.main.APISDK;
@@ -43,6 +44,9 @@ public class CreateBellActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_bell);
+        Intent i = getIntent();
+        TextView user_id = (TextView)findViewById(R.id.user_id);
+        user_id.setText(i.getStringExtra("id"));
     }
 
     public void createBell(View view) {

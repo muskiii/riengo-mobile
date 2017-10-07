@@ -69,5 +69,11 @@
             android:layout_height="wrap_content"
             android:onClick="createBell"
             android:text="@string/create_bell" />
+
+        <TextView
+            android:id="@+id/user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

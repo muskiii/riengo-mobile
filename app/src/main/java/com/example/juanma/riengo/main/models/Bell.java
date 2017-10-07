@@ -35,4 +35,11 @@ public class Bell {
         }
         return bellsNames;
     }
+    public static List<String> bellsToListString() {
+        List<String> bellsNames = Lists.newArrayList();
+        for (int i=1;i<=10;i++){
+            bellsNames.add("nombre "+i);
+        }
+        return bellsNames;
+    }
 }

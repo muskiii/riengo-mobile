@@ -30,7 +30,7 @@ public class ListBellsActivity extends AppCompatActivity {
         System.out.println("testas");
         setContentView(R.layout.activity_list_bells);
         System.out.println("test");
-        new GetBellsOperation().execute();
+        new TestAPIOperation().execute();
 
     }
 
@@ -80,5 +80,39 @@ public class ListBellsActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
         }
     }
+
+
+
+
+
+
+
+
+    private class TestAPIOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String result = null;
+            try {
+                result = APISDK.testApi();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            System.out.println(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+
 
 }

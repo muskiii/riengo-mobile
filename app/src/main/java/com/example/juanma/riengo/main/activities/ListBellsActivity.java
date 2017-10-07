@@ -7,12 +7,16 @@ import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
 import com.example.juanma.riengo.main.APISDK;
+import com.example.juanma.riengo.main.models.Bell;
+
+import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class ListBellsActivity extends AppCompatActivity {
 
@@ -47,6 +51,14 @@ public class ListBellsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             System.out.println(result);
+            try {
+                List<Bell> bellList = Bell.parseBells(result);
+                //TODO: popular scrollView
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

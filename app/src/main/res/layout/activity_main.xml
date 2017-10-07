@@ -7,14 +7,38 @@
     tools:context="com.example.juanma.riengo.MainActivity">
 
     <LinearLayout
-        android:layout_width="302dp"
-        android:layout_height="119dp"
+        android:layout_width="291dp"
+        android:layout_height="271dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="57dp">
+        tools:layout_editor_absoluteY="57dp"
+        tools:layout_editor_absoluteX="52dp">
+
+        <TextView
+            android:id="@+id/txtStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="nothing yet"/>
+
+
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
+
+
 
         <Button
             android:id="@+id/button3"
@@ -30,10 +54,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mis timbres"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            tools:layout_editor_absoluteY="157dp" />
+            tools:layout_editor_absoluteY="244dp" />
 
     </LinearLayout>
+
+    >
 
 </android.support.constraint.ConstraintLayout>

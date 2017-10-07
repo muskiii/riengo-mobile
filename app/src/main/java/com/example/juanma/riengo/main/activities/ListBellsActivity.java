@@ -84,10 +84,6 @@ public class ListBellsActivity extends AppCompatActivity {
 
 
 
-
-
-
-
     private class TestAPIOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -101,7 +97,21 @@ public class ListBellsActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-            System.out.println(result);
+            List<Bell> bellList = null;
+            try {
+                bellList = Bell.parseBells(result);
+                List<String> bellsNames = Bell.bellsToListString(bellList);
+                ListView bellsListView = (ListView) findViewById(R.id.bellsListView);
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        ListBellsActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        bellsNames );
+                bellsListView.setAdapter(arrayAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override

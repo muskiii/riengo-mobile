@@ -35,13 +35,11 @@ public class APISDK {
         String token = createJwtToken();
         URL url = new URL("https://riengo-api.herokuapp.com/v1/bell");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setDoOutput(true);
-        urlConnection.setChunkedStreamingMode(0);
-        urlConnection.setRequestMethod("POST");
+        urlConnection.setRequestMethod("GET");
         urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-        String result = StreamUtils.readStream(in,1024);
-        System.out.println("resultado api: "+result);
+        String result = StreamUtils.readStream(in,99999999);
+        System.out.println("resultado api2: "+result);
         return result;
 
     }

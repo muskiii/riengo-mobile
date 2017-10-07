@@ -21,8 +21,6 @@ public class Bell {
             JSONObject bellJson = bellsArray.getJSONObject(i);
             Bell bell = new Bell();
             bell.name = bellJson.get("name").toString();
-            bell.creation_time = new DateTime(bellJson.get("creation_time").toString());
-            bell.expiration_time = new DateTime(bellJson.get("expiration_time").toString());
             bellsList.add(bell);
         }
         return bellsList;

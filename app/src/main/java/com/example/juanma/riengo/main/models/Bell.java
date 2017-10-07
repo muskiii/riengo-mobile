@@ -27,4 +27,12 @@ public class Bell {
         }
         return bellsList;
     }
+
+    public static List<String> bellsToListString(List<Bell> bellsList) {
+        List<String> bellsNames = Lists.newArrayList();
+        for (Bell bell:  bellsList) {
+            bellsNames.add(bell.name);
+        }
+        return bellsNames;
+    }
 }

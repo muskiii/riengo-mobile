@@ -3,6 +3,9 @@ package com.example.juanma.riengo.main.activities;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListBellsActivity extends AppCompatActivity {
@@ -53,9 +57,15 @@ public class ListBellsActivity extends AppCompatActivity {
             System.out.println(result);
             try {
                 List<Bell> bellList = Bell.parseBells(result);
-                //TODO: popular scrollView
+                List<String> bellsNames = Bell.bellsToListString(bellList);
+                ListView bellsListView = (ListView) findViewById(R.id.bellsListView);
 
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        ListBellsActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        bellsNames );
 
+                bellsListView.setAdapter(arrayAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

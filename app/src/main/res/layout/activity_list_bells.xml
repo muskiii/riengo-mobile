@@ -7,8 +7,8 @@
     tools:context="com.example.juanma.riengo.main.activities.ListBellsActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="368dp"
+        android:layout_height="495dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
@@ -17,7 +17,7 @@
             android:id="@+id/button1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Timbre 1" />
+            android:text="asd 1asdasd" />
 
         <Button
             android:id="@+id/button2"
@@ -30,5 +30,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Timbre 3" />
+
+        <ListView
+            android:id="@+id/bellsListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -32,7 +32,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        mavenCentral()
+    }
 }
+
+//yepes agregado
+repositories {
+    maven { url 'https://maven.google.com' }
+}
+//yepes agregado
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,7 +52,7 @@ dependencies {
     compile 'com.onesignal:OneSignal:[3.6.2, 3.99.99]'
 
     //https://documentation.onesignal.com/docs/troubleshooting-android#section-option-a
-    //molesta en el
+    //molesta en el compilador, pero está ok
     compile 'com.google.android.gms:play-services-maps:11.4.2'
 
 

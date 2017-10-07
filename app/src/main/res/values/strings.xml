@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Riengo</string>
-<<<<<<< HEAD
     <string name="list_bells">List Bells</string>
     <string name="new_bell">New Bell</string>
     <string name="bell_name_label">Bell name:</string>
@@ -12,10 +11,7 @@
     <string name="hours_left">hours left.</string>
     <string name="welcome_to_riengo">Welcome to Riengo</string>
     <string name="choose_what_you_want_to_do_label">Choose what you want to do:</string>
-
-=======
     <string name="facebook_app_id">1964071173619633</string>
     <string name="fb_login_protocol_scheme">fb1964071173619633</string>
     <string name="fb_logged_id">1989</string>
->>>>>>> Facebook-Login-Integration
 </resources>

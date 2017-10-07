@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.juanma.riengo">
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-=======
     <uses-permission android:name="android.permission.INTERNET"/>
-
->>>>>>> Facebook-Login-Integration
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,16 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         <activity android:name=".main.activities.CreateBellActivity" />
         <activity android:name=".main.activities.ListBellsActivity" />
         <activity android:name=".main.activities.CreatedBellActivity"></activity>
-=======
         <meta-data android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/facebook_app_id"/>
->>>>>>> Facebook-Login-Integration
     </application>
-    >
+
 
     <activity android:name="com.facebook.FacebookActivity"
         android:configChanges=

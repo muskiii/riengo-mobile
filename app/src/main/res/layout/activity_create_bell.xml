@@ -22,7 +22,7 @@
                 android:id="@+id/bell_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bell name:"
+                android:text="@string/bell_name_label"
                 android:textSize="20sp" />
 
             <EditText
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Expires in:"
+                android:text="@string/expires_in_label"
                 android:textSize="20sp" />
 
             <EditText
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="hours"
+                android:text="@string/hours"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -68,6 +68,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="createBell"
-            android:text="Create Bell" />
+            android:text="@string/create_bell" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

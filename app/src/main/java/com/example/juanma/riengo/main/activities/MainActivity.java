@@ -23,6 +23,7 @@ public class MainActivity extends FragmentActivity {
     LoginButton loginButton;
     private ProfilePictureView profilePictureView;
     private TextView userNameView;
+    private String id ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,8 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 updateUI();
+                id = Profile.getCurrentProfile().getId();
+
             }
 
             @Override
@@ -80,12 +83,14 @@ public class MainActivity extends FragmentActivity {
                                                    AccessToken currentAccessToken) {
             if (currentAccessToken == null) {
                 updateUI();
-                //write your code here what to do when user logout
+                id = "";
+
             }
         }
     };
     public void createBell(View view) {
         Intent intent = new Intent(this, CreateBellActivity.class);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 

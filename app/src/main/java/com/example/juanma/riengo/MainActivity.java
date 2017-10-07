@@ -3,6 +3,7 @@ package com.example.juanma.riengo;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,9 +14,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.i("OneSignalExample","Yepes lOG!");
         //yepes agregado OneSignal
         OneSignal.startInit(this)
+                //.inFocusDisplaying(OneSignal.OSInFocusDisplayOption.InAppAlert)  //in app
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                //.inFocusDisplaying(OneSignal.OSInFocusDisplayOption.None)  //
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
 

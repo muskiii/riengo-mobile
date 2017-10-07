@@ -9,5 +9,7 @@
     <string name="new_bell_name">Your new bell is called:</string>
     <string name="and_has">and has</string>
     <string name="hours_left">hours left.</string>
+    <string name="welcome_to_riengo">Welcome to Riengo</string>
+    <string name="choose_what_you_want_to_do_label">Choose what you want to do:</string>
 
 </resources>

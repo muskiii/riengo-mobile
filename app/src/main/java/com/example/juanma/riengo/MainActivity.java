@@ -1,59 +1,85 @@
 package com.example.juanma.riengo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
     CallbackManager callbackManager;
-    TextView txtStatus;
     LoginButton loginButton;
+    private ProfilePictureView profilePictureView;
+    private TextView userNameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         initializeControls();
         loginWithFB();
-
-
-
     }
     private void initializeControls(){
         callbackManager = CallbackManager.Factory.create();
-        txtStatus = (TextView) findViewById(R.id.txtStatus);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        userNameView = (TextView) findViewById(R.id.user_name);
+        loginButton = findViewById(R.id.login_button);
+        profilePictureView =  findViewById(R.id.user_pic);
+        profilePictureView.setCropped(true);
     }
 
     private void loginWithFB(){
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                System.out.println(loginResult);
-                txtStatus.setText("success "+ loginResult.getAccessToken());
+                updateUI();
             }
 
             @Override
             public void onCancel() {
-                txtStatus.setText("Log in Cancelled");
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                System.out.println(error);
-                txtStatus.setText("Log in ERROR: " + error.getMessage());
             }
         });
 
     }
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+    private void updateUI() {
+        Profile profile = Profile.getCurrentProfile();
+        if (profile != null) {
+            profilePictureView.setProfileId(profile.getId());
+            userNameView
+                    .setText(String.format("%s %s",profile.getFirstName(), profile.getLastName()));
+        } else {
+            profilePictureView.setProfileId(null);
+            userNameView.setText("welcome");
+        }
+    }
+    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                AccessToken currentAccessToken) {
+            if (currentAccessToken == null) {
+                updateUI();
+                //write your code here what to do when user logout
+            }
+        }
+    };
 }

@@ -2,4 +2,5 @@
     <string name="app_name">Riengo</string>
     <string name="facebook_app_id">1964071173619633</string>
     <string name="fb_login_protocol_scheme">fb1964071173619633</string>
+    <string name="fb_logged_id">1989</string>
 </resources>

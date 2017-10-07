@@ -5,8 +5,11 @@ import android.util.Base64;
 import com.example.juanma.riengo.main.activities.StreamUtils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -56,5 +59,43 @@ public class APISDK {
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
         return StreamUtils.readStream(in,1024);
+    }
+    private static void writeStream(OutputStream out, String name, String expireTime) {
+        final PrintStream printStream = new PrintStream(out);
+
+        String urlParameters = "&name="+name+"&facebookId=92929"+"&hoursExpire="+expireTime;
+       /* Map mapa = Maps.newHashMap();
+        mapa.put("name",bell_name_edit.getText().toString());
+        mapa.put("facebookId","74748383");
+        mapa.put("hoursExpire","1");
+        JSONObject obj=new JSONObject(mapa);*/
+
+        printStream.print(urlParameters);
+        printStream.close();
+    }
+    public static String createBell(String name, String expireTime) throws IOException {
+        String token = createJwtToken();
+        URL url = new URL("https://riengo-api.herokuapp.com/v1/bell");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        System.out.println("el token: "+token);
+        try {
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
+
+            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+            writeStream(out,name,expireTime);
+
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            return StreamUtils.readStream(in,102444);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+        return null;
     }
 }

@@ -53,7 +53,8 @@ public class ListBellsActivity extends AppCompatActivity {
             }
             return result;
         }
-            @Override
+
+        @Override
         protected void onPostExecute(String result) {
                 try {
                     List<Bell> bellList = null;

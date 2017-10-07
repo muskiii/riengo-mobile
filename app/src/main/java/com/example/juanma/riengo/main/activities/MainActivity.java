@@ -29,6 +29,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeControls();
+        updateUI();
         loginWithFB();
     }
     private void initializeControls(){
@@ -83,4 +84,13 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+    public void createBell(View view) {
+        Intent intent = new Intent(this, CreateBellActivity.class);
+        startActivity(intent);
+    }
+
+    public void listBells(View view) {
+        Intent intent = new Intent(this, ListBellsActivity.class);
+        startActivity(intent);
+    }
 }

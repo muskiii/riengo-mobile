@@ -10,6 +10,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //yepes agregado
+        manifestPlaceholders = [onesignal_app_id: "cd9d6acc-189e-494a-b8b6-f925ced7c01f",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "REMOTE"]
+        //yepes agregado
     }
     buildTypes {
         release {
@@ -19,8 +24,21 @@ android {
     }
 }
 
+
+//yepes agregado
+repositories {
+    maven { url 'https://maven.google.com' }
+}
+//yepes agregado
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //yepes agregado
+    compile 'com.onesignal:OneSignal:[3.6.2, 3.99.99]'
+    //yepes agregado
+
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

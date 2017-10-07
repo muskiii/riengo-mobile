@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1097468135325",
+    "firebase_url": "https://riengo-mobile.firebaseio.com",
+    "project_id": "riengo-mobile",
+    "storage_bucket": "riengo-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097468135325:android:b213330aabb795b0",
+        "android_client_info": {
+          "package_name": "com.example.juanma.riengo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1097468135325-gpa1e93a7ok1jpc2elmi4p98gasq6cq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.juanma.riengo",
+            "certificate_hash": "ffae9c063912a56c2538c32c1f2fe1558bcca9af"
+          }
+        },
+        {
+          "client_id": "1097468135325-9ou1odnhs7ghsp9vkn2di116gskfmk0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfko-USHMiHZlgmLnnOnu4vQj-oKS73l0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1097468135325-9ou1odnhs7ghsp9vkn2di116gskfmk0l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

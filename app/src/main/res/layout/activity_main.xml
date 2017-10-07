@@ -8,6 +8,7 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 
+<<<<<<< HEAD
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -46,6 +47,40 @@
             android:layout_gravity="center"
             android:text="@string/choose_what_you_want_to_do_label"
             android:textAlignment="center" />
+=======
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/user_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            facebook:com_facebook_preset_size="small" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="welcome" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
+
+>>>>>>> Facebook-Login-Integration
 
         <Button
             android:id="@+id/new_bell"
@@ -64,12 +99,17 @@
             android:id="@+id/list_bells"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_gravity="center"
             android:onClick="listBells"
             android:text="@string/list_bells"
+=======
+            android:text="Mis timbres"
+            app:layout_constraintHorizontal_bias="0.0"
+>>>>>>> Facebook-Login-Integration
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            tools:layout_editor_absoluteY="157dp" />
+            tools:layout_editor_absoluteY="244dp" />
 
     </LinearLayout>
 

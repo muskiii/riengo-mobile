@@ -3,6 +3,7 @@ package com.example.juanma.riengo.main;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.juanma.riengo.main.activities.MainActivity;
 import com.example.juanma.riengo.main.activities.StreamUtils;
 
 import java.io.BufferedInputStream;
@@ -48,7 +49,7 @@ public class APISDK {
 
     }
     public static String getBellsByOwner(String idOwner) throws IOException {
-        URL url = new URL("https://riengo-api.herokuapp.com/v1/ownerbells/"+"[hash]");
+        URL url = new URL("https://riengo-api.herokuapp.com/v1/ownerbells/"+MainActivity.onesignalPlayerId);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         String token = createJwtToken();
@@ -69,13 +70,15 @@ public class APISDK {
     }
 
     private static void writeStream(OutputStream out, String name, String expireTime) {
-        String urlParameters = "&name="+name+"&facebookId=92929"+"&hoursExpire="+expireTime;
+        String urlParameters = "name="+name+"&facebookId="+ MainActivity.onesignalPlayerId+"&hoursExpire="+expireTime;
 
        /* Map mapa = Maps.newHashMap();
         mapa.put("name",bell_name_edit.getText().toString());
         mapa.put("facebookId","74748383");
         mapa.put("hoursExpire","1");
         JSONObject obj=new JSONObject(mapa);*/
+
+       Log.i("CallApiBell",urlParameters);
 
         final PrintStream printStream = new PrintStream(out);
         printStream.print(urlParameters);

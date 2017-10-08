@@ -45,7 +45,7 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public String userEmail = "marianoyepes@gmail.com";
-    public String onesignalPlayerId = "";
+    public static String onesignalPlayerId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

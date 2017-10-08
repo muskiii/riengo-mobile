@@ -28,6 +28,11 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        registerOnesignal();
+        registerFirebase();
+        registerSentry();
+
         setContentView(R.layout.activity_main);
         initializeControls();
         updateUI();
@@ -39,6 +44,68 @@ public class MainActivity extends FragmentActivity {
         loginButton = findViewById(R.id.login_button);
         profilePictureView =  findViewById(R.id.user_pic);
         profilePictureView.setCropped(true);
+    }
+
+    private void registerSentry() {
+        android.content.Context ctx = this.getApplicationContext();
+        // Use the Sentry DSN (client key) from the Project Settings page on Sentry
+        String sentryDsn = "https://db547300fe134efdb233940b72cc3500:6a58d01189124e10b2812c84ac45ab34@sentry.io/227253";
+        Sentry.init(sentryDsn, new AndroidSentryClientFactory(ctx));
+
+        // Set the user in the current context.
+        Sentry.getContext().setUser(
+                new UserBuilder().setEmail(userEmail).build()
+        );
+
+        try {
+            throw new UnsupportedOperationException("Sentry yepes Test!");
+        } catch (Exception e) {
+            // This sends an exception event to Sentry using the statically stored instance
+            // that was created in the ``main`` method.
+            Sentry.capture(e);
+        }
+    }
+
+    private void registerOnesignal() {
+        Log.i("OneSignalExample","Yepes lOG!");
+        //yepes agregado OneSignal
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
+
+        // Call syncHashedEmail anywhere in your app if you have the user's email.
+        // This improves the effectiveness of OneSignal's "best-time" notification scheduling feature.
+        OneSignal.syncHashedEmail(userEmail);
+
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.i("debug", "User: " + userId);
+                onesignalPlayerId = userId;
+                if (registrationId != null)
+                    Log.i("debug", "registrationId:" + registrationId);
+            }
+        });
+
+
+        //yepes agregado OneSignal
+    }
+
+    private void registerFirebase() {
+        //yepes firebase
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "id_inicio");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "name_inicio");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "inicio");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+        mFirebaseAnalytics.setUserProperty("favorite_food", "pescado");
+        mFirebaseAnalytics.setUserProperty("user_email", userEmail);
+        //yepes firebase
     }
 
     private void loginWithFB(){
@@ -91,6 +158,14 @@ public class MainActivity extends FragmentActivity {
     public void createBell(View view) {
         Intent intent = new Intent(this, CreateBellActivity.class);
         intent.putExtra("id", id);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "id_ejemplo");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "name_ejemplo");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+
         startActivity(intent);
     }
 
@@ -98,4 +173,5 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent(this, ListBellsActivity.class);
         startActivity(intent);
     }
+
 }

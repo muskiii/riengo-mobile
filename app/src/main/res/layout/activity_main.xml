@@ -26,14 +26,6 @@
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
 
-        <ImageView
-            android:id="@+id/icon_timbrazo"
-            android:layout_width="221dp"
-            android:layout_height="188dp"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:src="@drawable/icon_timbrazo" />
-
         <TextView
             android:id="@+id/welcome"
             android:layout_width="wrap_content"
@@ -44,6 +36,14 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/icon_timbrazo"
+            android:layout_width="221dp"
+            android:layout_height="188dp"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/icon_timbrazo2" />
 
         <TextView
             android:id="@+id/user_name"

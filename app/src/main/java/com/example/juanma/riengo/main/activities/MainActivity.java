@@ -44,7 +44,8 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public String userEmail = "marianoyepes@gmail.com";
-    public String onesignalPlayerId = "";
+    public static String userId = "";
+    public static String oneSignaluserId = "";
     private ProfileTracker mProfileTracker;
 
     @Override
@@ -105,7 +106,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void idsAvailable(String userId, String registrationId) {
                 Log.i("debug", "User: " + userId);
-                onesignalPlayerId = userId;
+                MainActivity.oneSignaluserId = userId;
                 new CreateUserOperation().execute();
                 if (registrationId != null)
                     Log.i("debug", "registrationId:" + registrationId);
@@ -138,14 +139,12 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                             Log.v("facebook - profile", currentProfile.getFirstName());
-                            id = currentProfile.getId();
+                            userId = id = currentProfile.getId();
                             updateUI();
                             Toast.makeText(getApplicationContext(),"successfully logged in as " + currentProfile.getFirstName(),Toast.LENGTH_SHORT).show();
                             mProfileTracker.stopTracking();
-                        }
+                      git   }
                     };
-                    // no need to call startTracking() on mProfileTracker
-                    // because it is called by its constructor, internally.
                 } else {
                     Profile profile = Profile.getCurrentProfile();
                         id = profile.getId();
@@ -184,7 +183,7 @@ public class MainActivity extends FragmentActivity {
                     .setText(String.format("%s %s", profile.getFirstName(), profile.getLastName()));
         } else {
             profilePictureView.setProfileId(null);
-            userNameView.setText("welcome");
+            userNameView.setText("");
         }
     }
     AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
@@ -214,6 +213,7 @@ public class MainActivity extends FragmentActivity {
 
     public void listBells(View view) {
         Intent intent = new Intent(this, ListBellsActivity.class);
+        intent.putExtra("fbId", id);
         startActivity(intent);
     }
 
@@ -224,7 +224,7 @@ public class MainActivity extends FragmentActivity {
             String result = null;
             try {
                 if(!userCreated){
-                    result = APISDK.createUser(onesignalPlayerId,"email@gmail.com","facebookId","Yepeto");
+                    result = APISDK.createUser(oneSignaluserId,"email@gmail.com",oneSignaluserId,"Yepeto");
                     userCreated=true;
                 }
                 return result;

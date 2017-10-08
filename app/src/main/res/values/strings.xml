@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Riengo</string>
-    <string name="list_bells">List Bells</string>
-    <string name="new_bell">New Bell</string>
+    <string name="list_bells">My Bells</string>
+    <string name="new_bell">Create Bell</string>
     <string name="bell_name_label">Bell name:</string>
     <string name="expires_in_label">Expires in:</string>
     <string name="hours">hours</string>
@@ -15,7 +15,6 @@
     <string name="classic_bell">Classic bell</string>
     <string name="facebook_app_id">1964071173619633</string>
     <string name="fb_login_protocol_scheme">fb1964071173619633</string>
-    <string name="fb_logged_id">1989</string>
     <string name="someone_is_ringing">Someone is Ringing</string>
 
 </resources>

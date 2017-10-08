@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -126,6 +127,22 @@ public class ListBellsActivity extends AppCompatActivity {
                         Map.Entry<String, String> item = (Map.Entry<String, String>) bellsListView.getItemAtPosition(position);
                         System.out.println("name " + item.getValue());
                         System.out.println("shortenURL " + item.getKey());
+
+//                        Intent intent = new Intent(ListBellsActivity.this, ShareBellActivity.class);
+
+//                        String bell_name_view = item.getValue();
+                        String short_URL_view = item.getKey();
+
+//                        intent.putExtra("bell_name", bell_name_view);
+//                        intent.putExtra("short_URL", short_URL_view);
+
+//                        startActivity(intent);
+
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Cuando llegues, avisame por Riengo acá: " + short_URL_view);
+                        sendIntent.setType("text/plain");
+                        startActivity(sendIntent);
                     }
                 });
             } catch (JSONException e) {

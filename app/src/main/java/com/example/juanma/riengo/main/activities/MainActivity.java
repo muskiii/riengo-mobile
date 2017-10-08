@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public String userEmail = "marianoyepes@gmail.com";
-    public String onesignalPlayerId = "";
+    public static String onesignalPlayerId = "";
     private ProfileTracker mProfileTracker;
 
     @Override

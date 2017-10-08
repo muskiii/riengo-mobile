@@ -21,8 +21,6 @@ public class Bell {
             JSONObject bellJson = bellsArray.getJSONObject(i);
             Bell bell = new Bell();
             bell.name = bellJson.get("name").toString();
-            bell.creation_time = new DateTime(bellJson.get("creation_time").toString());
-            bell.expiration_time = new DateTime(bellJson.get("expiration_time").toString());
             bellsList.add(bell);
         }
         return bellsList;
@@ -32,6 +30,13 @@ public class Bell {
         List<String> bellsNames = Lists.newArrayList();
         for (Bell bell:  bellsList) {
             bellsNames.add(bell.name);
+        }
+        return bellsNames;
+    }
+    public static List<String> bellsToListString() {
+        List<String> bellsNames = Lists.newArrayList();
+        for (int i=1;i<=10;i++){
+            bellsNames.add("nombre "+i);
         }
         return bellsNames;
     }

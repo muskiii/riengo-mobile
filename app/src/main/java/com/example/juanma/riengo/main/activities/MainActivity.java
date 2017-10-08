@@ -182,7 +182,7 @@ public class MainActivity extends FragmentActivity {
                     .setText(String.format("%s %s", profile.getFirstName(), profile.getLastName()));
         } else {
             profilePictureView.setProfileId(null);
-            userNameView.setText("welcome");
+            userNameView.setText("");
         }
     }
     AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {

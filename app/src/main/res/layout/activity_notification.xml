@@ -31,7 +31,7 @@
             android:layout_height="103dp"
             android:layout_gravity="center"
             android:padding="10dp"
-            app:srcCompat="@drawable/icon_timbrazo" />
+            app:srcCompat="@drawable/icon_timbrazo2" />
 
         <TextView
             android:id="@+id/welcome"

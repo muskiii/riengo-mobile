@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Riengo</string>
-    <string name="list_bells">List Bells</string>
-    <string name="new_bell">New Bell</string>
+    <string name="list_bells">My Bells</string>
+    <string name="new_bell">Create Bell</string>
     <string name="bell_name_label">Bell name:</string>
     <string name="expires_in_label">Expires in:</string>
     <string name="hours">hours</string>

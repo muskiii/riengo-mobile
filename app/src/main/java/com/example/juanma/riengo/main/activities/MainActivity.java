@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.juanma.riengo.R;
 import com.example.juanma.riengo.main.APISDK;
@@ -140,15 +141,15 @@ public class MainActivity extends FragmentActivity {
                             Log.v("facebook - profile", currentProfile.getFirstName());
                             userId = id = currentProfile.getId();
                             updateUI();
+                            Toast.makeText(getApplicationContext(),"successfully logged in as " + currentProfile.getFirstName(),Toast.LENGTH_SHORT).show();
                             mProfileTracker.stopTracking();
-                        }
+                      git   }
                     };
-                    // no need to call startTracking() on mProfileTracker
-                    // because it is called by its constructor, internally.
                 } else {
                     Profile profile = Profile.getCurrentProfile();
                         id = profile.getId();
                         updateUI();
+                    Toast.makeText(getApplicationContext(),"successfully logged in as " + profile.getFirstName(),Toast.LENGTH_SHORT).show();
                     Log.v("facebook - profile", profile.getFirstName());
                 }
             }

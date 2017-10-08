@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Riengo.iml" filepath="$PROJECT_DIR$/Riengo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/riengo-mobile.iml" filepath="$PROJECT_DIR$/riengo-mobile.iml" />
     </modules>

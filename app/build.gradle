@@ -14,7 +14,7 @@ android {
         exclude 'META-INF/ASL2.0'
     }
     defaultConfig {
-        applicationId "com.example.juanma.riengo"
+        applicationId "com.riengo"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1

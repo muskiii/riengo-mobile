@@ -15,4 +15,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
+    <Button
+        android:id="@+id/copy2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:onClick="copyToClipboard"
+        android:text="C"
+        android:textSize="18sp"
+    />
 </LinearLayout>

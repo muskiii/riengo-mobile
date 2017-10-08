@@ -27,7 +27,7 @@
         tools:layout_constraintTop_creator="1">
 
         <ImageView
-            android:id="@+id/icon_timbrazo"git 
+            android:id="@+id/icon_timbrazo"
             android:layout_width="221dp"
             android:layout_height="188dp"
             android:layout_gravity="center"

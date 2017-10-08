@@ -3,10 +3,9 @@ package com.example.juanma.riengo.main.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
@@ -17,6 +16,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
@@ -28,8 +28,6 @@ import java.io.IOException;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
-import io.sentry.context.Context;
-import io.sentry.event.BreadcrumbBuilder;
 import io.sentry.event.UserBuilder;
 
 public class MainActivity extends FragmentActivity {
@@ -45,7 +43,8 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public String userEmail = "marianoyepes@gmail.com";
-    public static String onesignalPlayerId = "";
+    public String onesignalPlayerId = "";
+    private ProfileTracker mProfileTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +63,7 @@ public class MainActivity extends FragmentActivity {
         callbackManager = CallbackManager.Factory.create();
         userNameView = (TextView) findViewById(R.id.user_name);
         loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions("public_profile");
         profilePictureView =  findViewById(R.id.user_pic);
         profilePictureView.setCropped(true);
     }
@@ -132,9 +132,25 @@ public class MainActivity extends FragmentActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                updateUI();
-                id = Profile.getCurrentProfile().getId();
+                if (Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                            Log.v("facebook - profile", currentProfile.getFirstName());
+                            id = currentProfile.getId();
+                            updateUI();
+                            mProfileTracker.stopTracking();
+                        }
+                    };
+                    // no need to call startTracking() on mProfileTracker
+                    // because it is called by its constructor, internally.
+                } else {
+                    Profile profile = Profile.getCurrentProfile();
+                        id = profile.getId();
+                        updateUI();
 
+                    Log.v("facebook - profile", profile.getFirstName());
+                }
             }
 
             @Override
@@ -144,14 +160,19 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onError(FacebookException error) {
+
             }
         });
 
     }
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        // if you don't add following block,
+        // your registered `FacebookCallback` won't be called
+        if (callbackManager.onActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
     }
     private void updateUI() {
         Profile profile = Profile.getCurrentProfile();

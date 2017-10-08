@@ -28,11 +28,11 @@
 
         <ImageView
             android:id="@+id/icon_timbrazo"
-            android:layout_width="130dp"
-            android:layout_height="103dp"
+            android:layout_width="221dp"
+            android:layout_height="188dp"
             android:layout_gravity="center"
             android:padding="10dp"
-            app:srcCompat="@drawable/icon_timbrazo" />
+            android:src="@drawable/icon_timbrazo" />
 
         <TextView
             android:id="@+id/welcome"

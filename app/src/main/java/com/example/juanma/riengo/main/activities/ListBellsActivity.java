@@ -71,17 +71,31 @@ public class ListBellsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+                List<Bell> bellList = null;
                 try {
-                    List<Bell> bellList = null;
                     bellList = Bell.parseBells(result);
-                    List<String> bellsNames = Bell.bellsToListString(bellList);
-                    ListView bellsListView = (ListView) findViewById(R.id.bellsListView);
+                    Map<String, String> bells = Bell.bellsToMap(bellList);
+                    final ListView bellsListView = findViewById(R.id.bellsListView);
 
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                            ListBellsActivity.this,
-                            android.R.layout.simple_list_item_1,
-                            bellsNames );
-                    bellsListView.setAdapter(arrayAdapter);
+                    BellAdapter bellAdapter = new BellAdapter(bells);
+                    bellsListView.setAdapter(bellAdapter);
+
+                    bellsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Map.Entry<String, String> item = (Map.Entry<String, String>) bellsListView.getItemAtPosition(position);
+                            System.out.println("name " + item.getValue());
+                            System.out.println("shortenURL " + item.getKey());
+
+                            String short_URL_view = item.getKey();
+
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "Cuando llegues, avisame con Riengo: " + short_URL_view);
+                            sendIntent.setType("text/plain");
+                            startActivity(sendIntent);
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

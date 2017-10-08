@@ -1,6 +1,7 @@
 package com.example.juanma.riengo.main;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.juanma.riengo.main.activities.StreamUtils;
 
@@ -60,16 +61,23 @@ public class APISDK {
 
         return StreamUtils.readStream(in,1024);
     }
-    private static void writeStream(OutputStream out, String name, String expireTime) {
-        final PrintStream printStream = new PrintStream(out);
 
+    private static void writeStream(OutputStream out, String string) {
+        final PrintStream printStream = new PrintStream(out);
+        printStream.print(string);
+        printStream.close();
+    }
+
+    private static void writeStream(OutputStream out, String name, String expireTime) {
         String urlParameters = "&name="+name+"&facebookId=92929"+"&hoursExpire="+expireTime;
+
        /* Map mapa = Maps.newHashMap();
         mapa.put("name",bell_name_edit.getText().toString());
         mapa.put("facebookId","74748383");
         mapa.put("hoursExpire","1");
         JSONObject obj=new JSONObject(mapa);*/
 
+        final PrintStream printStream = new PrintStream(out);
         printStream.print(urlParameters);
         printStream.close();
     }
@@ -88,6 +96,34 @@ public class APISDK {
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             writeStream(out,name,expireTime);
 
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            return StreamUtils.readStream(in,102444);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+        return null;
+    }
+
+    public static String createUser(String onesignalId, String email, String facebookId, String name) throws IOException {
+        String token = createJwtToken();
+        URL url = new URL("https://riengo-api.herokuapp.com/v1/user");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        System.out.println("el token: "+token);
+        try {
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
+
+            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+            //email pushId facebookId name
+            String params = "pushId="+onesignalId+"&facebookId="+facebookId+"&name="+name+"&email="+email;
+            Log.i("debug",params);
+            writeStream(out, params);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             return StreamUtils.readStream(in,102444);
 

@@ -1,6 +1,7 @@
 package com.example.juanma.riengo.main.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
+import com.example.juanma.riengo.main.APISDK;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -22,6 +24,8 @@ import com.facebook.login.widget.ProfilePictureView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.onesignal.OneSignal;
 
+import java.io.IOException;
+
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.context.Context;
@@ -34,6 +38,8 @@ public class MainActivity extends FragmentActivity {
     private ProfilePictureView profilePictureView;
     private TextView userNameView;
     private String id ;
+    //Mejorar que guarde el estado en otro lado más lindo que acá
+    private boolean userCreated;
 
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -83,8 +89,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void registerOnesignal() {
+
         Log.i("OneSignalExample","Yepes lOG!");
-        //yepes agregado OneSignal
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
@@ -99,13 +105,11 @@ public class MainActivity extends FragmentActivity {
             public void idsAvailable(String userId, String registrationId) {
                 Log.i("debug", "User: " + userId);
                 onesignalPlayerId = userId;
+                new CreateUserOperation().execute();
                 if (registrationId != null)
                     Log.i("debug", "registrationId:" + registrationId);
             }
         });
-
-
-        //yepes agregado OneSignal
     }
 
     private void registerFirebase() {
@@ -154,7 +158,7 @@ public class MainActivity extends FragmentActivity {
         if (profile != null) {
             profilePictureView.setProfileId(profile.getId());
             userNameView
-                    .setText(String.format("%s %s",profile.getFirstName(), profile.getLastName()));
+                    .setText(String.format("%s %s", profile.getFirstName(), profile.getLastName()));
         } else {
             profilePictureView.setProfileId(null);
             userNameView.setText("welcome");
@@ -188,6 +192,36 @@ public class MainActivity extends FragmentActivity {
     public void listBells(View view) {
         Intent intent = new Intent(this, ListBellsActivity.class);
         startActivity(intent);
+    }
+
+
+    private class CreateUserOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String result = null;
+            try {
+                if(!userCreated){
+                    result = APISDK.createUser(onesignalPlayerId,"email@gmail.com","facebookId","Yepeto");
+                    userCreated=true;
+                }
+                return result;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
     }
 
 }

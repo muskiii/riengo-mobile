@@ -19,6 +19,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //yepes agregado
         manifestPlaceholders = [onesignal_app_id : "cd9d6acc-189e-494a-b8b6-f925ced7c01f",

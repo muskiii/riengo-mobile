@@ -1,5 +1,6 @@
 package com.example.juanma.riengo.main.activities;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -117,6 +119,16 @@ public class ListBellsActivity extends AppCompatActivity {
                         Map.Entry<String, String> item = (Map.Entry<String, String>) bellsListView.getItemAtPosition(position);
                         System.out.println("name " + item.getValue());
                         System.out.println("shortenURL " + item.getKey());
+
+                        Intent intent = new Intent(ListBellsActivity.this, ShareBellActivity.class);
+
+                        String bell_name_view = item.getValue();
+                        String short_URL_view = item.getKey();
+
+                        intent.putExtra("bell_name", bell_name_view);
+                        intent.putExtra("short_URL", short_URL_view);
+
+                        startActivity(intent);
                     }
                 });
             } catch (JSONException e) {

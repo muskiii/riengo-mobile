@@ -30,7 +30,7 @@ public class ListBellsActivity extends AppCompatActivity {
         System.out.println("testas");
         setContentView(R.layout.activity_list_bells);
         System.out.println("test");
-        new TestAPIOperation().execute();
+        new GetBellsOperation().execute();
 
     }
 

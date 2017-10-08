@@ -14,13 +14,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Key;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.MacProvider;
 
 /**
  * Created by rakuraku on 07/10/17.
@@ -49,18 +46,18 @@ public class APISDK {
 
     }
     public static String getBellsByOwner(String idOwner) throws IOException {
-        URL url = new URL("https://riengo-api.herokuapp.com/v1/ownerbells/"+MainActivity.onesignalPlayerId);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String urlStr = "https://riengo-api.herokuapp.com/v1/user/"+MainActivity.oneSignaluserId+"/bell";
+        Log.i("CallApiUserBell",urlStr);
+        URL url = new URL(urlStr);
 
         String token = createJwtToken();
-
-        urlConnection.setDoOutput(true);
-        urlConnection.setChunkedStreamingMode(0);
-        urlConnection.setRequestMethod("POST");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("GET");
         urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-        return StreamUtils.readStream(in,1024);
+        String result = StreamUtils.readStream(in,99999999);
+        System.out.println("resultado api2: "+result);
+        return result;
     }
 
     private static void writeStream(OutputStream out, String string) {
@@ -70,7 +67,7 @@ public class APISDK {
     }
 
     private static void writeStream(OutputStream out, String name, String expireTime) {
-        String urlParameters = "name="+name+"&facebookId="+ MainActivity.onesignalPlayerId+"&hoursExpire="+expireTime;
+        String urlParameters = "name="+name+"&facebookId="+ MainActivity.oneSignaluserId +"&hoursExpire="+expireTime;
 
        /* Map mapa = Maps.newHashMap();
         mapa.put("name",bell_name_edit.getText().toString());

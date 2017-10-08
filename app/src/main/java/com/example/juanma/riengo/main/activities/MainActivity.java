@@ -43,7 +43,8 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public String userEmail = "marianoyepes@gmail.com";
-    public static String onesignalPlayerId = "";
+    public static String userId = "";
+    public static String oneSignaluserId = "";
     private ProfileTracker mProfileTracker;
 
     @Override
@@ -104,7 +105,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void idsAvailable(String userId, String registrationId) {
                 Log.i("debug", "User: " + userId);
-                onesignalPlayerId = userId;
+                MainActivity.oneSignaluserId = userId;
                 new CreateUserOperation().execute();
                 if (registrationId != null)
                     Log.i("debug", "registrationId:" + registrationId);
@@ -137,7 +138,7 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                             Log.v("facebook - profile", currentProfile.getFirstName());
-                            id = currentProfile.getId();
+                            userId = id = currentProfile.getId();
                             updateUI();
                             mProfileTracker.stopTracking();
                         }
@@ -148,7 +149,6 @@ public class MainActivity extends FragmentActivity {
                     Profile profile = Profile.getCurrentProfile();
                         id = profile.getId();
                         updateUI();
-
                     Log.v("facebook - profile", profile.getFirstName());
                 }
             }
@@ -222,7 +222,7 @@ public class MainActivity extends FragmentActivity {
             String result = null;
             try {
                 if(!userCreated){
-                    result = APISDK.createUser(onesignalPlayerId,"email@gmail.com","facebookId","Yepeto");
+                    result = APISDK.createUser(oneSignaluserId,"email@gmail.com",oneSignaluserId,"Yepeto");
                     userCreated=true;
                 }
                 return result;

@@ -16,4 +16,6 @@
     <string name="facebook_app_id">1964071173619633</string>
     <string name="fb_login_protocol_scheme">fb1964071173619633</string>
     <string name="fb_logged_id">1989</string>
+    <string name="someone_is_ringing">Someone is Ringing</string>
+
 </resources>

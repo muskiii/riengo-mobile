@@ -38,9 +38,7 @@ public class ListBellsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("testas");
         setContentView(R.layout.activity_list_bells);
-        System.out.println("test");
         Intent i = getIntent();
         fbId = i.getStringExtra("id");
         if (!Strings.isNullOrEmpty(fbId)) {

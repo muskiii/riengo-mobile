@@ -1,5 +1,6 @@
 package com.example.juanma.riengo.main.activities;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.example.juanma.riengo.R;
 import com.example.juanma.riengo.main.APISDK;
 import com.example.juanma.riengo.main.models.Bell;
 import com.example.juanma.riengo.main.utils.BellAdapter;
+import com.google.common.base.Strings;
 
 import org.json.JSONException;
 
@@ -31,18 +33,25 @@ import java.util.Map;
 
 public class ListBellsActivity extends AppCompatActivity {
 
+    String fbId = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("testas");
         setContentView(R.layout.activity_list_bells);
         System.out.println("test");
+        Intent i = getIntent();
+        fbId = i.getStringExtra("id");
+        if (!Strings.isNullOrEmpty(fbId)) {
+            MainActivity.oneSignaluserId = fbId;
+        }
+
         new GetBellsOperation().execute();
 
     }
 
     public String readContent() throws IOException {
-        String bells  = APISDK.getBellsByOwner("owner");
+        String bells  = APISDK.getBellsByOwner();
         return bells;
     }
 

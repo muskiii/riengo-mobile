@@ -45,7 +45,7 @@ public class APISDK {
         return result;
 
     }
-    public static String getBellsByOwner(String idOwner) throws IOException {
+    public static String getBellsByOwner() throws IOException {
         String urlStr = "https://riengo-api.herokuapp.com/v1/user/"+MainActivity.oneSignaluserId+"/bell";
         Log.i("CallApiUserBell",urlStr);
         URL url = new URL(urlStr);

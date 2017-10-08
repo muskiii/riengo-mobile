@@ -212,6 +212,7 @@ public class MainActivity extends FragmentActivity {
 
     public void listBells(View view) {
         Intent intent = new Intent(this, ListBellsActivity.class);
+        intent.putExtra("fbId", id);
         startActivity(intent);
     }
 

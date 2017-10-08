@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
@@ -18,12 +19,27 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.onesignal.OneSignal;
+
+import io.sentry.Sentry;
+import io.sentry.android.AndroidSentryClientFactory;
+import io.sentry.context.Context;
+import io.sentry.event.BreadcrumbBuilder;
+import io.sentry.event.UserBuilder;
+
 public class MainActivity extends FragmentActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
     private ProfilePictureView profilePictureView;
     private TextView userNameView;
     private String id ;
+
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    public String userEmail = "marianoyepes@gmail.com";
+    public String onesignalPlayerId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

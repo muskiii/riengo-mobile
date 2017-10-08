@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.juanma.riengo.R;
@@ -39,7 +41,8 @@ public class CreateBellActivity extends AppCompatActivity {
 
     String bellName = "";
     String expireTime = "";
-
+    Switch switchButton;
+    LinearLayout expireBox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,17 @@ public class CreateBellActivity extends AppCompatActivity {
         Intent i = getIntent();
         TextView user_id = (TextView)findViewById(R.id.user_id);
         user_id.setText(i.getStringExtra("id"));
+        switchButton = (Switch) findViewById(R.id.switchexpires);
+        expireBox = (LinearLayout) findViewById(R.id.expireBox);
+        switchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (expireBox.getVisibility() == View.GONE )
+                    expireBox.setVisibility(View.VISIBLE);
+                else
+                    expireBox.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void createBell(View view) {
@@ -66,6 +80,7 @@ public class CreateBellActivity extends AppCompatActivity {
         String bells  = APISDK.createBell(bellName,expireTime);
         return bells;
     }
+
 
     private class CreateBellsOperation extends AsyncTask<String, Void, String> {
         @Override

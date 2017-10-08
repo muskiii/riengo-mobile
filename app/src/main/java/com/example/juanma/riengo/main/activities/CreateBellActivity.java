@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -87,7 +88,8 @@ public class CreateBellActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                result = postContent();
+                result = APISDK.createBell(bellName,expireTime);
+                Log.i("ApiCallResult",result);
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();

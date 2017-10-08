@@ -62,7 +62,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
+        <EditText
             android:id="@+id/short_URL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

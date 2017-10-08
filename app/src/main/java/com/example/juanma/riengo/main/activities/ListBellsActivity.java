@@ -120,15 +120,21 @@ public class ListBellsActivity extends AppCompatActivity {
                         System.out.println("name " + item.getValue());
                         System.out.println("shortenURL " + item.getKey());
 
-                        Intent intent = new Intent(ListBellsActivity.this, ShareBellActivity.class);
+//                        Intent intent = new Intent(ListBellsActivity.this, ShareBellActivity.class);
 
-                        String bell_name_view = item.getValue();
+//                        String bell_name_view = item.getValue();
                         String short_URL_view = item.getKey();
 
-                        intent.putExtra("bell_name", bell_name_view);
-                        intent.putExtra("short_URL", short_URL_view);
+//                        intent.putExtra("bell_name", bell_name_view);
+//                        intent.putExtra("short_URL", short_URL_view);
 
-                        startActivity(intent);
+//                        startActivity(intent);
+
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Cuando llegues, avisame por Riengo acá: " + short_URL_view);
+                        sendIntent.setType("text/plain");
+                        startActivity(sendIntent);
                     }
                 });
             } catch (JSONException e) {

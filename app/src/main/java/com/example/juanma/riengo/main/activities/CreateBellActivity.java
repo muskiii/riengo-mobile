@@ -99,7 +99,8 @@ public class CreateBellActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            //TODO redireccionar a bell CREADA
+            Intent intent = new Intent(CreateBellActivity.this, ListBellsActivity.class);
+            startActivity(intent);
         }
 
         @Override

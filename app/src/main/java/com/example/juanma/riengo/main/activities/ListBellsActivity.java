@@ -85,13 +85,16 @@ public class ListBellsActivity extends AppCompatActivity {
                             System.out.println("name " + item.getValue());
                             System.out.println("shortenURL " + item.getKey());
 
+                            String bell_name = item.getValue();
                             String short_URL_view = item.getKey();
 
-                            Intent sendIntent = new Intent();
-                            sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, "Cuando llegues, avisame con Riengo: " + short_URL_view);
-                            sendIntent.setType("text/plain");
-                            startActivity(sendIntent);
+                            Intent intent = new Intent(ListBellsActivity.this, ShareBellActivity.class);
+
+                            intent.putExtra("bell_name", bell_name);
+                            intent.putExtra("short_URL", short_URL_view);
+                            intent.putExtra("shareMsg", "Cuando llegues, avisame con Riengo: " + short_URL_view);
+
+                            startActivity(intent);
                         }
                     });
                 } catch (JSONException e) {

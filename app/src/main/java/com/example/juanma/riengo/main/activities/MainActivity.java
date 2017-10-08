@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public String userEmail = "marianoyepes@gmail.com";
+    public String onesignalPlayerId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +37,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerSentry() {
-
         android.content.Context ctx = this.getApplicationContext();
-
         // Use the Sentry DSN (client key) from the Project Settings page on Sentry
         String sentryDsn = "https://db547300fe134efdb233940b72cc3500:6a58d01189124e10b2812c84ac45ab34@sentry.io/227253";
         Sentry.init(sentryDsn, new AndroidSentryClientFactory(ctx));
-
-        // Alternatively, if you configured your DSN in a `sentry.properties`
-        // file (see the configuration documentation).
-        //Sentry.init(new AndroidSentryClientFactory(ctx));
 
         // Set the user in the current context.
         Sentry.getContext().setUser(
@@ -65,15 +60,25 @@ public class MainActivity extends AppCompatActivity {
         Log.i("OneSignalExample","Yepes lOG!");
         //yepes agregado OneSignal
         OneSignal.startInit(this)
-                //.inFocusDisplaying(OneSignal.OSInFocusDisplayOption.InAppAlert)  //in app
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-                //.inFocusDisplaying(OneSignal.OSInFocusDisplayOption.None)  //
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
 
         // Call syncHashedEmail anywhere in your app if you have the user's email.
         // This improves the effectiveness of OneSignal's "best-time" notification scheduling feature.
         OneSignal.syncHashedEmail(userEmail);
+
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.i("debug", "User: " + userId);
+                onesignalPlayerId = userId;
+                if (registrationId != null)
+                    Log.i("debug", "registrationId:" + registrationId);
+            }
+        });
+
+
         //yepes agregado OneSignal
     }
 

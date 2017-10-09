@@ -41,6 +41,9 @@ public class ListBellsActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
+                while (Strings.isNullOrEmpty(MainActivity.oneSignaluserId) && Strings.isNullOrEmpty(MainActivity.fbId)){
+                    System.out.println("waiting for id...");
+                }
                 result = readContent();
                 return result;
             } catch (IOException e) {
@@ -83,9 +86,9 @@ public class ListBellsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
         }
-
         @Override
         protected void onPreExecute() {
+
         }
 
         @Override

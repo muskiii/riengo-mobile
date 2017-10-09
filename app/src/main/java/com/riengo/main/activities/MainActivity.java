@@ -2,15 +2,13 @@ package com.riengo.main.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.riengo.R;
-import com.riengo.main.APISDK;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -21,9 +19,10 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
-
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.onesignal.OneSignal;
+import com.riengo.R;
+import com.riengo.main.APISDK;
 
 import java.io.IOException;
 
@@ -33,14 +32,12 @@ import io.sentry.event.UserBuilder;
 
 public class MainActivity extends FragmentActivity {
 
-    CallbackManager callbackManager;
-    LoginButton loginButton;
+    private LoginButton loginButton;
     private ProfilePictureView profilePictureView;
     private TextView userNameView;
-    private String id ;
+
     //Mejorar que guarde el estado en otro lado más lindo que acá
     private boolean userCreated;
-
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -48,20 +45,31 @@ public class MainActivity extends FragmentActivity {
     public static String userId = "";
     public static String oneSignaluserId = "";
     public static String fbId = "";
+    public static String userName = "";
 
-    private ProfileTracker mProfileTracker;
+    private CallbackManager callbackManager;
+    private ProfileTracker profileTracker;
+    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                   AccessToken currentAccessToken) {
+            if (currentAccessToken == null) {
+                updateUI(null);
+                userId = MainActivity.oneSignaluserId;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
+        initializeControls();
+        updateUI(null);
         registerOnesignal();
         registerFirebase();
         registerSentry();
 
-        setContentView(R.layout.activity_main);
-        initializeControls();
-        updateUI();
         loginWithFB();
     }
     private void initializeControls(){
@@ -140,28 +148,27 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 if (Profile.getCurrentProfile() == null) {
-                    mProfileTracker = new ProfileTracker() {
+                    profileTracker = new ProfileTracker() {
                         @Override
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                             Log.v("facebook - profile", currentProfile.getFirstName());
-                            MainActivity.userId = currentProfile.getId();
-                            MainActivity.fbId = currentProfile.getId();
+                            setUser(currentProfile);
                             System.out.println("userId logueado FB1: "+MainActivity.userId);
                             new CreateUserOperation().execute();
-                            updateUI();
+                            updateUI(currentProfile);
                             Toast.makeText(getApplicationContext(),"successfully logged in as " + currentProfile.getFirstName(),Toast.LENGTH_SHORT).show();
-                            mProfileTracker.stopTracking();
-                      }
+                            profileTracker.stopTracking();
+                        }
                     };
                 } else {
                     Profile profile = Profile.getCurrentProfile();
-                        MainActivity.userId = profile.getId();
-                        MainActivity.fbId = profile.getId();
-                        new CreateUserOperation().execute();
-                        System.out.println("userId logueado FB2: "+MainActivity.userId);
-                        updateUI();
+                    setUser(profile);
+                    updateUI(profile);
+                    new CreateUserOperation().execute();
+
                     Toast.makeText(getApplicationContext(),"successfully logged in as " + profile.getFirstName(),Toast.LENGTH_SHORT).show();
                     Log.v("facebook - profile", profile.getFirstName());
+                    Log.v("userId logueado FB2: ",MainActivity.userId);
                 }
             }
 
@@ -180,14 +187,11 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // if you don't add following block,
-        // your registered `FacebookCallback` won't be called
         if (callbackManager.onActivityResult(requestCode, resultCode, data)) {
             return;
         }
     }
-    private void updateUI() {
-        Profile profile = Profile.getCurrentProfile();
+    private void updateUI(Profile profile) {
         if (profile != null) {
             profilePictureView.setProfileId(profile.getId());
             userNameView
@@ -195,19 +199,9 @@ public class MainActivity extends FragmentActivity {
         } else {
             profilePictureView.setProfileId(null);
             userNameView.setText("");
+            userNameView.setVisibility(View.GONE);
         }
     }
-    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                   AccessToken currentAccessToken) {
-            if (currentAccessToken == null) {
-                updateUI();
-                userId = MainActivity.oneSignaluserId;
-
-            }
-        }
-    };
     public void createBell(View view) {
         Intent intent = new Intent(this, CreateBellActivity.class);
 
@@ -223,7 +217,6 @@ public class MainActivity extends FragmentActivity {
 
     public void listBells(View view) {
         Intent intent = new Intent(this, ListBellsActivity.class);
-        intent.putExtra("fbId", id);
         startActivity(intent);
     }
 
@@ -233,7 +226,7 @@ public class MainActivity extends FragmentActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                result = APISDK.createUser(MainActivity.oneSignaluserId,"email@gmail.com",MainActivity.fbId,"Yepeto");
+                result = APISDK.createUser(MainActivity.oneSignaluserId,"email@gmail.com",MainActivity.fbId,MainActivity.userName);
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -252,6 +245,12 @@ public class MainActivity extends FragmentActivity {
         @Override
         protected void onProgressUpdate(Void... values) {
         }
+    }
+
+    private void setUser(Profile profile){
+        MainActivity.userId = profile.getId();
+        MainActivity.fbId = profile.getId();
+        MainActivity.userName = profile.getId();
     }
 
 }

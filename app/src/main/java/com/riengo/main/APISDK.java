@@ -40,7 +40,7 @@ public class APISDK {
         urlConnection.setRequestMethod("GET");
         urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-        String result = StreamUtils.readStream(in,99999999);
+        String result = StreamUtils.readStream(in);
         System.out.println("resultado api2: "+result);
         return result;
 
@@ -55,7 +55,7 @@ public class APISDK {
         urlConnection.setRequestMethod("GET");
         urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-        String result = StreamUtils.readStream(in,99999999);
+        String result = StreamUtils.readStream(in);
         System.out.println("resultado api2: "+result);
         return result;
     }
@@ -97,7 +97,7 @@ public class APISDK {
             writeStream(out,name,expireTime);
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            return StreamUtils.readStream(in,102444);
+            return StreamUtils.readStream(in);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +125,7 @@ public class APISDK {
             Log.i("debug",params);
             writeStream(out, params);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            return StreamUtils.readStream(in,102444);
+            return StreamUtils.readStream(in);
 
         } catch (IOException e) {
             e.printStackTrace();

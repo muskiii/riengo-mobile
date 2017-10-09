@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Riengo</string>
+    <string name="list_bells">Mis timbres</string>
+    <string name="new_bell">Crear timbre</string>
+    <string name="bell_name_label">Nombre de Timbre:</string>
+    <string name="expires_in_label">Expira en:</string>
+    <string name="hours">horas</string>
+    <string name="create_bell">Crear Timbre</string>
+    <string name="new_bell_name">Tu nuevo timbre se llama:</string>
+    <string name="and_has">y tiene</string>
+    <string name="hours_left">horas restantes.</string>
+    <string name="welcome_to_riengo">Bienvenido a Riengo</string>
+    <string name="choose_what_you_want_to_do_label">Elije que quieres hacer:</string>
+    <string name="share_your_bell">Comparte tu timbre</string>
+    <string name="classic_bell">Timbre clásico</string>
+    <string name="facebook_app_id">1964071173619633</string>
+    <string name="fb_login_protocol_scheme">fb1964071173619633</string>
+    <string name="someone_is_ringing">Alguien está en la puerta</string>
+    <string name="expires">Expira?</string>
+    <string name="loading_bells">Cargando timbres...</string>
+
+</resources>

@@ -27,14 +27,8 @@ public class ListBellsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_bells);
-        Intent i = getIntent();
-        fbId = i.getStringExtra("id");
-        if (!Strings.isNullOrEmpty(fbId)) {
-            MainActivity.oneSignaluserId = fbId;
-        }
 
         new GetBellsOperation().execute();
-
     }
 
     public String readContent() throws IOException {

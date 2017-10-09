@@ -46,7 +46,7 @@ public class APISDK {
 
     }
     public static String getBellsByOwner() throws IOException {
-        String urlStr = "https://riengo-api.herokuapp.com/v1/user/"+MainActivity.oneSignaluserId+"/bell";
+        String urlStr = "https://riengo-api.herokuapp.com/v1/user/"+MainActivity.userId+"/bell";
         Log.i("CallApiUserBell",urlStr);
         URL url = new URL(urlStr);
 
@@ -67,7 +67,7 @@ public class APISDK {
     }
 
     private static void writeStream(OutputStream out, String name, String expireTime) {
-        String urlParameters = "name="+name+"&facebookId="+ MainActivity.oneSignaluserId +"&hoursExpire="+expireTime;
+        String urlParameters = "name="+name+"&facebookId="+ MainActivity.userId +"&hoursExpire="+expireTime;
 
        /* Map mapa = Maps.newHashMap();
         mapa.put("name",bell_name_edit.getText().toString());

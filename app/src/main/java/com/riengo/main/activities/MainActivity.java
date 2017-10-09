@@ -107,6 +107,7 @@ public class MainActivity extends FragmentActivity {
             public void idsAvailable(String userId, String registrationId) {
                 Log.i("debug", "User: " + userId);
                 MainActivity.oneSignaluserId = userId;
+                MainActivity.userId = userId;
                 new CreateUserOperation().execute();
                 if (registrationId != null)
                     Log.i("debug", "registrationId:" + registrationId);
@@ -192,14 +193,13 @@ public class MainActivity extends FragmentActivity {
                                                    AccessToken currentAccessToken) {
             if (currentAccessToken == null) {
                 updateUI();
-                id = "";
+                userId = MainActivity.oneSignaluserId;
 
             }
         }
     };
     public void createBell(View view) {
         Intent intent = new Intent(this, CreateBellActivity.class);
-        intent.putExtra("id", id);
 
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "id_ejemplo");

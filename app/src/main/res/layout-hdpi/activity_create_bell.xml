@@ -68,7 +68,7 @@
                 android:layout_weight="1"
                 android:labelFor="@+id/hours_left"
                 android:text="@string/expires_in_label"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/hours_left"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/hours"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <Button

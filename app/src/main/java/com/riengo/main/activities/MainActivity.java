@@ -32,6 +32,7 @@ import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
 
 public class MainActivity extends FragmentActivity {
+
     CallbackManager callbackManager;
     LoginButton loginButton;
     private ProfilePictureView profilePictureView;
@@ -46,6 +47,8 @@ public class MainActivity extends FragmentActivity {
     public String userEmail = "marianoyepes@gmail.com";
     public static String userId = "";
     public static String oneSignaluserId = "";
+    public static String fbId = "";
+
     private ProfileTracker mProfileTracker;
 
     @Override
@@ -108,6 +111,7 @@ public class MainActivity extends FragmentActivity {
                 Log.i("debug", "User: " + userId);
                 MainActivity.oneSignaluserId = userId;
                 MainActivity.userId = userId;
+                System.out.println("userId logueado ONESIGNAL: "+MainActivity.userId);
                 new CreateUserOperation().execute();
                 if (registrationId != null)
                     Log.i("debug", "registrationId:" + registrationId);
@@ -141,6 +145,9 @@ public class MainActivity extends FragmentActivity {
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                             Log.v("facebook - profile", currentProfile.getFirstName());
                             MainActivity.userId = currentProfile.getId();
+                            MainActivity.fbId = currentProfile.getId();
+                            System.out.println("userId logueado FB1: "+MainActivity.userId);
+                            new CreateUserOperation().execute();
                             updateUI();
                             Toast.makeText(getApplicationContext(),"successfully logged in as " + currentProfile.getFirstName(),Toast.LENGTH_SHORT).show();
                             mProfileTracker.stopTracking();
@@ -149,6 +156,9 @@ public class MainActivity extends FragmentActivity {
                 } else {
                     Profile profile = Profile.getCurrentProfile();
                         MainActivity.userId = profile.getId();
+                        MainActivity.fbId = profile.getId();
+                        new CreateUserOperation().execute();
+                        System.out.println("userId logueado FB2: "+MainActivity.userId);
                         updateUI();
                     Toast.makeText(getApplicationContext(),"successfully logged in as " + profile.getFirstName(),Toast.LENGTH_SHORT).show();
                     Log.v("facebook - profile", profile.getFirstName());
@@ -223,10 +233,7 @@ public class MainActivity extends FragmentActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                if(!userCreated){
-                    result = APISDK.createUser(MainActivity.userId,"email@gmail.com",MainActivity.userId,"Yepeto");
-                    userCreated=true;
-                }
+                result = APISDK.createUser(MainActivity.oneSignaluserId,"email@gmail.com",MainActivity.fbId,"Yepeto");
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();

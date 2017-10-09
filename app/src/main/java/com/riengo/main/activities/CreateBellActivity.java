@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.riengo.R;
 import com.riengo.main.APISDK;
@@ -75,6 +76,7 @@ public class CreateBellActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            Toast.makeText(getApplicationContext(),"New bell created!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(CreateBellActivity.this, ListBellsActivity.class);
             startActivity(intent);
         }

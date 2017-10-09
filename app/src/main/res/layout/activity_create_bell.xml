@@ -4,17 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.riengo.main.activities.CreateBellActivity">
+    tools:context="com.riengo.main.activities.CreateBellActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <LinearLayout
         android:id="@+id/bigLinear"
-        android:layout_width="match_parent"
-        android:layout_height="495dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,6 +31,7 @@
 
             <TextView
                 android:id="@+id/bell_name_text"
+                android:labelFor="@+id/bell_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bell_name_label"
@@ -30,7 +39,7 @@
 
             <EditText
                 android:id="@+id/bell_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
@@ -42,7 +51,7 @@
             android:layout_width="148dp"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Expires?" />
+            android:text="@string/expires" />
 
 
         <LinearLayout
@@ -54,6 +63,7 @@
 
             <TextView
                 android:id="@+id/expires_in"
+                android:labelFor="@+id/hours_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -47,35 +47,24 @@ public class MainActivity extends FragmentActivity {
     private LoginButton loginButton;
     private ProfilePictureView profilePictureView;
     private TextView userNameView;
-    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                   AccessToken currentAccessToken) {
-            if (currentAccessToken == null) {
-                updateUI(null);
-                userId = MainActivity.oneSignaluserId;
-            }
-        }
-    };
 
     //Mejorar que guarde el estado en otro lado más lindo que acá
     private boolean userCreated;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private CallbackManager callbackManager = CallbackManager.Factory.create();
-    ;
     private ProfileTracker profileTracker;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        callbackManager = CallbackManager.Factory.create();
         initializeControls();
+        loginWithFB();
         updateUI(null);
         registerOnesignal();
         registerFirebase();
         registerSentry();
-
-        loginWithFB();
     }
 
     private void initializeControls() {
@@ -149,9 +138,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void loginWithFB() {
-        LoginManager.getInstance().logInWithPublishPermissions(
-                this,
-                Arrays.asList("publish_actions"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -180,8 +166,8 @@ public class MainActivity extends FragmentActivity {
                                             profileTracker.stopTracking();
 
                                             Log.v("facebook - profile", currentProfile.getFirstName());
-                                            Log.v("userId logueado FB1: ", MainActivity.userId);
-                                            Log.v("FB1 Email: ", MainActivity.userEmail);
+                                            Log.v("userId logueado FB1", MainActivity.userId);
+                                            Log.v("FB1 Email", MainActivity.userEmail);
                                         }
                                     };
                                 } else {
@@ -196,8 +182,8 @@ public class MainActivity extends FragmentActivity {
                                     Toast.makeText(getApplicationContext(), "successfully logged in as " + profile.getFirstName(), Toast.LENGTH_SHORT).show();
 
                                     Log.v("facebook - profile", profile.getFirstName());
-                                    Log.v("userId logueado FB2: ", MainActivity.userId);
-                                    Log.v("FB1 Email: ", MainActivity.userEmail);
+                                    Log.v("userId logueado FB2", MainActivity.userId);
+                                    Log.v("FB1 Email", MainActivity.userEmail);
                                 }
                             }
                         }
@@ -291,5 +277,15 @@ public class MainActivity extends FragmentActivity {
         protected void onProgressUpdate(Void... values) {
         }
     }
+    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                   AccessToken currentAccessToken) {
+            if (currentAccessToken == null) {
+                updateUI(null);
+                userId = MainActivity.oneSignaluserId;
+            }
+        }
+    };
 
 }

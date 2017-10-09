@@ -113,7 +113,7 @@ public class APISDK {
         return null;
     }
 
-    public static String createUser(String onesignalId, String email, String facebookId, String name) throws IOException {
+    public static String createUser(String mobileId, String email, String name) throws IOException {
         String token = createJwtToken();
         URL url = new URL("https://riengo-api.herokuapp.com/v1/user");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -127,7 +127,7 @@ public class APISDK {
 
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             //email pushId facebookId name
-            String params = "pushId="+onesignalId+"&facebookId="+facebookId+"&name="+name+"&email="+email;
+            String params = "mobileId="+mobileId+"&name="+name+"&email="+email;
             Log.i("debug",params);
             writeStream(out, params);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());

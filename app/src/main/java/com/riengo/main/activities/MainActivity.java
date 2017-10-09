@@ -58,11 +58,12 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("ble","antes de registeronesignal");
+        registerOnesignal();
         callbackManager = CallbackManager.Factory.create();
         initializeControls();
         loginWithFB();
         updateUI(null);
-        registerOnesignal();
         registerFirebase();
         registerSentry();
     }
@@ -257,7 +258,8 @@ public class MainActivity extends FragmentActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                result = APISDK.createUser(MainActivity.oneSignaluserId, MainActivity.userEmail, MainActivity.fbId, MainActivity.userName);
+
+                result = APISDK.createUser(MainActivity.userId, "default@default.com", "default");
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();

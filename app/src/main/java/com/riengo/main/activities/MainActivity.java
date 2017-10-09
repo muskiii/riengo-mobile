@@ -262,7 +262,7 @@ public class MainActivity extends FragmentActivity {
     private void setUser(Profile profile, String email) {
         MainActivity.userId = profile.getId();
         MainActivity.fbId = profile.getId();
-        MainActivity.userName = profile.getId();
+        MainActivity.userName = profile.getFirstName()+ " "+profile.getLastName();
         MainActivity.userEmail = email;
     }
 

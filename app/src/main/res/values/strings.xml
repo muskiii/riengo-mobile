@@ -17,5 +17,6 @@
     <string name="fb_login_protocol_scheme">fb1964071173619633</string>
     <string name="someone_is_ringing">Someone is Ringing</string>
     <string name="expires">Expires?</string>
+    <string name="loading_bells">Loading Bells...</string>
 
 </resources>

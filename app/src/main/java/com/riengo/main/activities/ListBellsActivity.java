@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.riengo.R;
 import com.riengo.main.APISDK;
@@ -23,11 +26,15 @@ import java.util.Map;
 public class ListBellsActivity extends AppCompatActivity {
 
     String fbId = "";
+    LinearLayout linearWithList;
+    RelativeLayout progressBarLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_bells);
-
+        linearWithList = (LinearLayout) findViewById(R.id.linearwithList);
+        progressBarLayout = (RelativeLayout) findViewById(R.id.progressBarLayout);
         new GetBellsOperation().execute();
     }
 
@@ -82,6 +89,8 @@ public class ListBellsActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
+                    linearWithList.setVisibility(View.VISIBLE);
+                    progressBarLayout.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -95,9 +104,6 @@ public class ListBellsActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
         }
     }
-
-
-
 
     private class TestAPIOperation extends AsyncTask<String, Void, String> {
         @Override
@@ -137,6 +143,8 @@ public class ListBellsActivity extends AppCompatActivity {
                         startActivity(sendIntent);
                     }
                 });
+                linearWithList.setVisibility(View.VISIBLE);
+                progressBarLayout.setVisibility(View.INVISIBLE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

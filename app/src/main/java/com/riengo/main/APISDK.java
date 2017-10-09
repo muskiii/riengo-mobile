@@ -68,12 +68,12 @@ public class APISDK {
         printStream.close();
     }
 
-    private static void writeStream(OutputStream out, String name, String expireTime) {
+    private static void writeStreamCreateBell(OutputStream out, String name, String expireTime) {
         System.out.println("NEW BELL: userId logueado: "+MainActivity.userId);
         if (Strings.isNullOrEmpty(expireTime)){
             expireTime = "0";
 ;        }
-        String urlParameters = "name="+name+"&facebookId="+ MainActivity.userId +"&hoursExpire="+expireTime;
+        String urlParameters = "name="+name+"&mobileId="+ MainActivity.userId +"&hoursExpire="+expireTime;
 
        /* Map mapa = Maps.newHashMap();
         mapa.put("name",bell_name_edit.getText().toString());
@@ -100,7 +100,7 @@ public class APISDK {
             urlConnection.setRequestProperty ("Authorization", "Bearer "+token);
 
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-            writeStream(out,name,expireTime);
+            writeStreamCreateBell(out,name,expireTime);
 
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             return StreamUtils.readStream(in);
@@ -127,7 +127,7 @@ public class APISDK {
 
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             //email pushId facebookId name
-            String params = "mobileId="+mobileId+"&name="+name+"&email="+email;
+            String params = "&pushId="+MainActivity.oneSignaluserId+"&mobileId="+mobileId+"&name="+name+"&email="+email;
             Log.i("debug",params);
             writeStream(out, params);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());

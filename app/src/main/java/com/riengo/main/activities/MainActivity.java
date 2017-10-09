@@ -22,6 +22,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.common.base.Strings;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.onesignal.OneSignal;
 import com.riengo.R;
@@ -41,7 +42,6 @@ public class MainActivity extends FragmentActivity {
 
     public static String userId = "";
     public static String oneSignaluserId = "";
-    public static String fbId = "";
     public static String userName = "";
     private static String userEmail = "";
     private LoginButton loginButton;
@@ -248,7 +248,6 @@ public class MainActivity extends FragmentActivity {
 
     private void setUser(Profile profile, String email) {
         MainActivity.userId = profile.getId();
-        MainActivity.fbId = profile.getId();
         MainActivity.userName = profile.getFirstName()+ " "+profile.getLastName();
         MainActivity.userEmail = email;
     }
@@ -258,8 +257,13 @@ public class MainActivity extends FragmentActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-
-                result = APISDK.createUser(MainActivity.userId, "default@default.com", "default");
+                String mail ="default@default.com";
+                String name = "default";
+                if (!Strings.isNullOrEmpty(MainActivity.userEmail)) {
+                    mail = MainActivity.userEmail;
+                    name = MainActivity.userName;
+                }
+                result = APISDK.createUser(MainActivity.userId,mail, name);
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();

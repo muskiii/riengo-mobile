@@ -25,7 +25,6 @@ import java.util.Map;
 
 public class ListBellsActivity extends AppCompatActivity {
 
-    String fbId = "";
     LinearLayout linearWithList;
     RelativeLayout progressBarLayout;
 
@@ -48,7 +47,7 @@ public class ListBellsActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                while (Strings.isNullOrEmpty(MainActivity.oneSignaluserId) && Strings.isNullOrEmpty(MainActivity.fbId)){
+                while (Strings.isNullOrEmpty(MainActivity.userId)){
                     System.out.println("waiting for id...");
                 }
                 result = readContent();

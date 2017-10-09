@@ -14,8 +14,11 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
@@ -24,7 +27,11 @@ import com.onesignal.OneSignal;
 import com.riengo.R;
 import com.riengo.main.APISDK;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.Arrays;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
@@ -32,23 +39,14 @@ import io.sentry.event.UserBuilder;
 
 public class MainActivity extends FragmentActivity {
 
-    private LoginButton loginButton;
-    private ProfilePictureView profilePictureView;
-    private TextView userNameView;
-
-    //Mejorar que guarde el estado en otro lado más lindo que acá
-    private boolean userCreated;
-
-    private FirebaseAnalytics mFirebaseAnalytics;
-
-    public String userEmail = "marianoyepes@gmail.com";
     public static String userId = "";
     public static String oneSignaluserId = "";
     public static String fbId = "";
     public static String userName = "";
-
-    private CallbackManager callbackManager;
-    private ProfileTracker profileTracker;
+    private static String userEmail = "";
+    private LoginButton loginButton;
+    private ProfilePictureView profilePictureView;
+    private TextView userNameView;
     AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
@@ -59,6 +57,13 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+
+    //Mejorar que guarde el estado en otro lado más lindo que acá
+    private boolean userCreated;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private CallbackManager callbackManager = CallbackManager.Factory.create();
+    ;
+    private ProfileTracker profileTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +77,12 @@ public class MainActivity extends FragmentActivity {
 
         loginWithFB();
     }
-    private void initializeControls(){
-        callbackManager = CallbackManager.Factory.create();
-        userNameView = (TextView) findViewById(R.id.user_name);
+
+    private void initializeControls() {
+        userNameView = findViewById(R.id.user_name);
         loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("public_profile");
-        profilePictureView =  findViewById(R.id.user_pic);
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+        profilePictureView = findViewById(R.id.user_pic);
         profilePictureView.setCropped(true);
     }
 
@@ -103,7 +108,7 @@ public class MainActivity extends FragmentActivity {
 
     private void registerOnesignal() {
 
-        Log.i("OneSignalExample","Yepes lOG!");
+        Log.i("OneSignalExample", "Yepes lOG!");
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
@@ -119,7 +124,7 @@ public class MainActivity extends FragmentActivity {
                 Log.i("debug", "User: " + userId);
                 MainActivity.oneSignaluserId = userId;
                 MainActivity.userId = userId;
-                System.out.println("userId logueado ONESIGNAL: "+MainActivity.userId);
+                System.out.println("userId logueado ONESIGNAL: " + MainActivity.userId);
                 new CreateUserOperation().execute();
                 if (registrationId != null)
                     Log.i("debug", "registrationId:" + registrationId);
@@ -143,33 +148,65 @@ public class MainActivity extends FragmentActivity {
         //yepes firebase
     }
 
-    private void loginWithFB(){
+    private void loginWithFB() {
+        LoginManager.getInstance().logInWithPublishPermissions(
+                this,
+                Arrays.asList("publish_actions"));
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                if (Profile.getCurrentProfile() == null) {
-                    profileTracker = new ProfileTracker() {
-                        @Override
-                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                            Log.v("facebook - profile", currentProfile.getFirstName());
-                            setUser(currentProfile);
-                            System.out.println("userId logueado FB1: "+MainActivity.userId);
-                            new CreateUserOperation().execute();
-                            updateUI(currentProfile);
-                            Toast.makeText(getApplicationContext(),"successfully logged in as " + currentProfile.getFirstName(),Toast.LENGTH_SHORT).show();
-                            profileTracker.stopTracking();
-                        }
-                    };
-                } else {
-                    Profile profile = Profile.getCurrentProfile();
-                    setUser(profile);
-                    updateUI(profile);
-                    new CreateUserOperation().execute();
 
-                    Toast.makeText(getApplicationContext(),"successfully logged in as " + profile.getFirstName(),Toast.LENGTH_SHORT).show();
-                    Log.v("facebook - profile", profile.getFirstName());
-                    Log.v("userId logueado FB2: ",MainActivity.userId);
-                }
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(final JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+
+
+                                if (Profile.getCurrentProfile() == null) {
+                                    profileTracker = new ProfileTracker() {
+                                        @Override
+                                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                                            try {
+                                                setUser(currentProfile, object.getString("email"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            new CreateUserOperation().execute();
+                                            updateUI(currentProfile);
+                                            Toast.makeText(getApplicationContext(), "successfully logged in as " + currentProfile.getFirstName(), Toast.LENGTH_SHORT).show();
+                                            profileTracker.stopTracking();
+
+                                            Log.v("facebook - profile", currentProfile.getFirstName());
+                                            Log.v("userId logueado FB1: ", MainActivity.userId);
+                                            Log.v("FB1 Email: ", MainActivity.userEmail);
+                                        }
+                                    };
+                                } else {
+                                    Profile profile = Profile.getCurrentProfile();
+                                    try {
+                                        setUser(profile, object.getString("email"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    updateUI(profile);
+                                    new CreateUserOperation().execute();
+                                    Toast.makeText(getApplicationContext(), "successfully logged in as " + profile.getFirstName(), Toast.LENGTH_SHORT).show();
+
+                                    Log.v("facebook - profile", profile.getFirstName());
+                                    Log.v("userId logueado FB2: ", MainActivity.userId);
+                                    Log.v("FB1 Email: ", MainActivity.userEmail);
+                                }
+                            }
+                        }
+                );
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
             }
 
             @Override
@@ -182,8 +219,8 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
-
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -191,27 +228,29 @@ public class MainActivity extends FragmentActivity {
             return;
         }
     }
+
     private void updateUI(Profile profile) {
         if (profile != null) {
             profilePictureView.setProfileId(profile.getId());
             userNameView
                     .setText(String.format("%s %s", profile.getFirstName(), profile.getLastName()));
+            userNameView.setVisibility(View.VISIBLE);
+            profilePictureView.setVisibility(View.VISIBLE);
         } else {
             profilePictureView.setProfileId(null);
             userNameView.setText("");
             userNameView.setVisibility(View.GONE);
+            profilePictureView.setVisibility(View.GONE);
         }
     }
+
     public void createBell(View view) {
         Intent intent = new Intent(this, CreateBellActivity.class);
-
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "id_ejemplo");
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "name_ejemplo");
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-
         startActivity(intent);
     }
 
@@ -220,13 +259,19 @@ public class MainActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+    private void setUser(Profile profile, String email) {
+        MainActivity.userId = profile.getId();
+        MainActivity.fbId = profile.getId();
+        MainActivity.userName = profile.getId();
+        MainActivity.userEmail = email;
+    }
 
     private class CreateUserOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                result = APISDK.createUser(MainActivity.oneSignaluserId,"email@gmail.com",MainActivity.fbId,MainActivity.userName);
+                result = APISDK.createUser(MainActivity.oneSignaluserId, MainActivity.userEmail, MainActivity.fbId, MainActivity.userName);
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -245,12 +290,6 @@ public class MainActivity extends FragmentActivity {
         @Override
         protected void onProgressUpdate(Void... values) {
         }
-    }
-
-    private void setUser(Profile profile){
-        MainActivity.userId = profile.getId();
-        MainActivity.fbId = profile.getId();
-        MainActivity.userName = profile.getId();
     }
 
 }

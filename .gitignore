@@ -11,3 +11,6 @@
 *.idea/modules.xml
 *.idea/misc.xml
 .idea/
+app/bin
+app/.project
+.project

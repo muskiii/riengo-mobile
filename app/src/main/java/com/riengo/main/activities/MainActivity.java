@@ -140,7 +140,7 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                             Log.v("facebook - profile", currentProfile.getFirstName());
-                            userId = id = currentProfile.getId();
+                            MainActivity.userId = currentProfile.getId();
                             updateUI();
                             Toast.makeText(getApplicationContext(),"successfully logged in as " + currentProfile.getFirstName(),Toast.LENGTH_SHORT).show();
                             mProfileTracker.stopTracking();
@@ -148,7 +148,7 @@ public class MainActivity extends FragmentActivity {
                     };
                 } else {
                     Profile profile = Profile.getCurrentProfile();
-                        id = profile.getId();
+                        MainActivity.userId = profile.getId();
                         updateUI();
                     Toast.makeText(getApplicationContext(),"successfully logged in as " + profile.getFirstName(),Toast.LENGTH_SHORT).show();
                     Log.v("facebook - profile", profile.getFirstName());
@@ -224,7 +224,7 @@ public class MainActivity extends FragmentActivity {
             String result = null;
             try {
                 if(!userCreated){
-                    result = APISDK.createUser(oneSignaluserId,"email@gmail.com",oneSignaluserId,"Yepeto");
+                    result = APISDK.createUser(MainActivity.userId,"email@gmail.com",MainActivity.userId,"Yepeto");
                     userCreated=true;
                 }
                 return result;

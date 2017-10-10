@@ -24,6 +24,8 @@ import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.google.common.base.Strings;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.onesignal.OSNotificationAction;
+import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 import com.riengo.R;
 import com.riengo.main.APISDK;
@@ -100,6 +102,7 @@ public class MainActivity extends FragmentActivity {
 
         Log.i("OneSignalExample", "Yepes lOG!");
         OneSignal.startInit(this)
+                .setNotificationOpenedHandler(new NotificationOpenedHandler())
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
@@ -293,5 +296,26 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+
+    public class NotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
+
+        // This fires when a notification is opened by tapping on it.
+        @Override
+        public void notificationOpened(OSNotificationOpenResult result) {
+            OSNotificationAction.ActionType actionType = result.action.type;
+            JSONObject data = result.notification.payload.additionalData;
+            String activityToBeOpened;
+System.out.println("data================================================================================================================");
+            String bellName = data.optString("bellName", null);
+            System.out.println(bellName);
+
+
+            Intent intent = new Intent(MainActivity.this, NotificationRingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("bellName",bellName);
+            startActivity(intent);
+
+        }
+    }
 
 }

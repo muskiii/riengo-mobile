@@ -12,6 +12,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.base.Strings;
 import com.riengo.R;
 import com.riengo.main.APISDK;
 
@@ -65,6 +66,9 @@ public class CreateBellActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
+                while (Strings.isNullOrEmpty(MainActivity.userId)){
+                    System.out.println("waiting for id...");
+                }
                 result = APISDK.createBell(bellName,expireTime);
                 Log.i("ApiCallResult",result);
                 return result;

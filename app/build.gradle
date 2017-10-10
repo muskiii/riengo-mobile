@@ -22,7 +22,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //yepes agregado
-        manifestPlaceholders = [onesignal_app_id : "cd9d6acc-189e-494a-b8b6-f925ced7c01f",
+        manifestPlaceholders = [onesignal_app_id               : "cd9d6acc-189e-494a-b8b6-f925ced7c01f",
                                 // Project number pulled from dashboard, local value is ignored.
                                 onesignal_google_project_number: "REMOTE"]
         //yepes agregado
@@ -49,16 +49,17 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.onesignal:OneSignal:[3.6.2, 3.99.99]'
 
     //https://documentation.onesignal.com/docs/troubleshooting-android#section-option-a
     //molesta en el compilador, pero está ok
-    compile 'com.google.android.gms:play-services-maps:11.4.2'
+    
 
 
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'io.jsonwebtoken:jjwt:0.7.0'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
+    compile 'io.jsonwebtoken:jjwt:0.7.0'
+    compile 'com.onesignal:OneSignal:[3.6.2, 3.99.99]'
+    compile 'com.google.android.gms:play-services-maps:11.4.2'
+    compile 'com.android.support:appcompat-v7:26.+'
     compile 'io.jsonwebtoken:jjwt:0.7.0'
     compile 'com.facebook.android:facebook-login:[4,5)'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -66,8 +67,8 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.4.2'
     compile 'com.google.firebase:firebase-messaging:11.4.2'
     compile 'io.sentry:sentry-android:1.5.4'
-    testCompile 'junit:junit:4.12'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    testCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

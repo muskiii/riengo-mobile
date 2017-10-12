@@ -66,7 +66,7 @@ public class CreateBellActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String result = null;
             try {
-                while (Strings.isNullOrEmpty(MainActivity.userId)){
+                while (Strings.isNullOrEmpty(MainActivity.riengoUser.getCurrentUser())){
                     System.out.println("waiting for id...");
                 }
                 result = APISDK.createBell(bellName,expireTime);

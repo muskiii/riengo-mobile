@@ -47,8 +47,8 @@ public class APISDK {
 
     }
     public static String getBellsByOwner() throws IOException {
-        System.out.println("GETBELLS: userId logueado: "+MainActivity.userId);
-        String urlStr = "https://riengo-api.herokuapp.com/v1/user/"+MainActivity.userId+"/bell";
+        System.out.println("GETBELLS: userId logueado: "+MainActivity.riengoUser.getCurrentUser());
+        String urlStr = "https://riengo-api.herokuapp.com/v1/user/"+MainActivity.riengoUser.getCurrentUser()+"/bell";
         Log.i("CallApiUserBell",urlStr);
         URL url = new URL(urlStr);
 
@@ -69,11 +69,11 @@ public class APISDK {
     }
 
     private static void writeStreamCreateBell(OutputStream out, String name, String expireTime) {
-        System.out.println("NEW BELL: userId logueado: "+MainActivity.userId);
+        System.out.println("NEW BELL: userId logueado: "+MainActivity.riengoUser.getCurrentUser());
         if (Strings.isNullOrEmpty(expireTime)){
             expireTime = "0";
 ;        }
-        String urlParameters = "name="+name+"&mobileId="+ MainActivity.userId +"&hoursExpire="+expireTime;
+        String urlParameters = "name="+name+"&mobileId="+ MainActivity.riengoUser.getCurrentUser()+"&hoursExpire="+expireTime;
 
        /* Map mapa = Maps.newHashMap();
         mapa.put("name",bell_name_edit.getText().toString());
@@ -113,7 +113,7 @@ public class APISDK {
         return null;
     }
 
-    public static String createUser(String mobileId, String email, String name) throws IOException {
+    public static String createUser(String oneSignalId, String cuerrentUser, String email, String name) throws IOException {
         String token = createJwtToken();
         URL url = new URL("https://riengo-api.herokuapp.com/v1/user");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -127,7 +127,7 @@ public class APISDK {
 
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             //email pushId facebookId name
-            String params = "&pushId="+MainActivity.oneSignaluserId+"&mobileId="+mobileId+"&name="+name+"&email="+email;
+            String params = "&pushId="+oneSignalId+"&mobileId="+cuerrentUser+"&name="+name+"&email="+email;
             Log.i("debug",params);
             writeStream(out, params);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());

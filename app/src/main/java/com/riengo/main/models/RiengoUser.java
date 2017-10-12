@@ -14,7 +14,7 @@ public final class RiengoUser {
 
     public RiengoUser(String oneSignaluserId) {
         this.fbId = "";
-        this.userName = "Aspen";
+        this.userName = "Riengo";
         this.currentUser = oneSignaluserId;
         this.oneSignaluserId = oneSignaluserId;
         this.userEmail = "Aspen@Test";
@@ -31,6 +31,12 @@ public final class RiengoUser {
 
     public String getOneSignaluserId() {
         return oneSignaluserId;
+    }
+
+    public void setOneSignaluserId(String oneSignaluserId) {
+        this.oneSignaluserId = oneSignaluserId;
+        this.currentUser = oneSignaluserId;
+        this.facebookOn = false;
     }
 
     public String getUserName() {
@@ -80,7 +86,15 @@ public final class RiengoUser {
 
     public void reset() {
         this.fbId = "";
-        this.userName = "Aspen";
+        this.userName = "Riengo";
+        this.currentUser = oneSignaluserId;
+        this.userEmail = "Aspen@Test";
+        this.facebookOn = false;
+    }
+    public void fullReset(String oneSignaluserId) {
+        this.fbId = "";
+        this.userName = "Riengo";
+        this.oneSignaluserId = oneSignaluserId;
         this.currentUser = oneSignaluserId;
         this.userEmail = "Aspen@Test";
         this.facebookOn = false;

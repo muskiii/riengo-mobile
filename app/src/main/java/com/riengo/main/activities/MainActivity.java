@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -28,10 +29,14 @@ import com.onesignal.OneSignal;
 import com.riengo.R;
 import com.riengo.main.APISDK;
 import com.riengo.main.models.RiengoUser;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
@@ -41,6 +46,7 @@ public class MainActivity extends FragmentActivity {
     private LoginButton loginButton;
     private ProfilePictureView profilePictureView;
     private TextView userNameView;
+    AccessTokenTracker accessTokenTracker;
     private FirebaseAnalytics mFirebaseAnalytics;
     private ProfileTracker profileTracker;
     private CallbackManager callbackManager;
@@ -48,11 +54,49 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Aspen Log", "OnCreate");
+
+        OneSignal.startInit(this)
+                .setNotificationOpenedHandler(new NotificationOpenedHandler())
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
+
+        accessTokenTracker  = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                       AccessToken currentAccessToken) {
+                Log.i("Aspen Log", "TokenChanged");
+                SharedPreferences sharedPref = getSharedPreferences("riengoPref",0);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                if (currentAccessToken != null) {
+                    Log.i("Aspen Log", "Facebook LogIn");
+                    editor.putBoolean("facebookOn", MainActivity.riengoUser.isFacebookOn());
+                    editor.putString("fbId", MainActivity.riengoUser.getFbId());
+                    editor.putString("name", MainActivity.riengoUser.getUserName());
+                    editor.putString("email", MainActivity.riengoUser.getUserEmail());
+                }else {
+                    Log.i("Aspen Log", "Facebook Logout");
+                    editor.clear();
+                    editor.putString("oneSignalUserId", MainActivity.riengoUser.getOneSignaluserId());
+                    MainActivity.riengoUser.reset();
+                }
+                editor.commit();
+                updateUI();
+
+            }
+        };
+
         setContentView(R.layout.activity_main);
-
         restoreSession();
-        registerOnesignal();
-
+        try {
+            new RegisterOnesignal().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         callbackManager = CallbackManager.Factory.create();
         initializeControls();
         registerFacebookLogin();
@@ -65,30 +109,49 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void restoreSession() {
-        Log.i("restoreSession", "Aspen Log");
+        Log.i("Aspen Log", "restoreSession");
         SharedPreferences sharedPref= getSharedPreferences("riengoPref", 0);
-        if (sharedPref != null) {
-            MainActivity.riengoUser  = new RiengoUser(sharedPref.getString("oneSignalUserId", "NOT_FOUND"));
-            if(sharedPref.getBoolean("facebookOn", false)) {
-                MainActivity.riengoUser.setUserName(sharedPref.getString("name", "NOT_FOUND"));
-                MainActivity.riengoUser.setFbId(sharedPref.getString("fbId", "NOT_FOUND"));
-                MainActivity.riengoUser.setUserEmail(sharedPref.getString("email", "NOT_FOUND"));
-                MainActivity.riengoUser.setFacebookOn(sharedPref.getBoolean("facebookOn", true));
-            }
+        MainActivity.riengoUser  = new RiengoUser(sharedPref.getString("oneSignalUserId", "NOT_FOUND"));
+        if(sharedPref.getBoolean("facebookOn", false)) {
+            MainActivity.riengoUser.setUserName(sharedPref.getString("name", "NOT_FOUND"));
+            MainActivity.riengoUser.setFbId(sharedPref.getString("fbId", "NOT_FOUND"));
+            MainActivity.riengoUser.setUserEmail(sharedPref.getString("email", "NOT_FOUND"));
         }
-        Log.i("XOX",MainActivity.riengoUser.toString());
+        Log.i("Aspen Log", "RECOVERED " + MainActivity.riengoUser.toString());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i("Aspen Log", "onStart");
         updateUI();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("initializeControls", "Aspen Log");
+        Log.i("Aspen Log", "onStop");
+        storeSession();
+    }
+
+    private void storeSession() {
+        SharedPreferences sharedPref = getSharedPreferences("riengoPref", 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("oneSignalUserId", MainActivity.riengoUser.getOneSignaluserId());
+        if (MainActivity.riengoUser.isFacebookOn()) {
+            editor.putBoolean("facebookOn", MainActivity.riengoUser.isFacebookOn());
+            editor.putString("fbId", MainActivity.riengoUser.getFbId());
+            editor.putString("name", MainActivity.riengoUser.getUserName());
+            editor.putString("email", MainActivity.riengoUser.getUserEmail());
+        }
+        Log.i("Aspen Log", "Stored "+ MainActivity.riengoUser.toString());
+        editor.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Aspen Log", "onDestroy");
         SharedPreferences sharedPref = getSharedPreferences("riengoPref", 0);
         SharedPreferences.Editor editor= sharedPref.edit();
         editor.putString("oneSignalUserId", MainActivity.riengoUser.getOneSignaluserId());
@@ -101,8 +164,15 @@ public class MainActivity extends FragmentActivity {
         editor.commit();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i("Aspen Log", "onrestart");
+        restoreSession();
+    }
+
     private void initializeControls() {
-        Log.i("initializeControls", "Aspen Log");
+        Log.i("Aspen Log", "initializeControls");
         userNameView = findViewById(R.id.user_name);
         loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
@@ -129,30 +199,6 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private void registerOnesignal() {
-        Log.i("OneSignalExample", "Yepes lOG!");
-        OneSignal.startInit(this)
-                .setNotificationOpenedHandler(new NotificationOpenedHandler())
-                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-                .unsubscribeWhenNotificationsAreDisabled(true)
-                .init();
-
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                if (MainActivity.riengoUser == null) {
-                    MainActivity.riengoUser = new RiengoUser(userId);
-                    new CreateUserOperation().execute();
-                    if (registrationId != null) {
-                        Log.i("debug", "registrationId:" + registrationId);
-                    }
-                }else if(MainActivity.riengoUser.getOneSignaluserId() != userId){
-                    MainActivity.riengoUser.setOneSignaluserId(userId);
-                }
-            }
-        });
-    }
-
     private void registerFirebase() {
         //yepes firebase
         // Obtain the FirebaseAnalytics instance.
@@ -174,52 +220,60 @@ public class MainActivity extends FragmentActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.i("Facebook onSuccess", "Aspen Log");
+                Log.i("Aspen Log", "Facebook onSuccess");
 
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(final JSONObject object, GraphResponse response) {
-                                Log.i("Facebook onComplete", "Aspen Log");
+                                Log.i("Aspen Log", "Facebook onComplete");
                                 if (Profile.getCurrentProfile() == null) {
                                     profileTracker = new ProfileTracker() {
                                         @Override
                                         protected void onCurrentProfileChanged(Profile oldProfile,
                                                                                Profile currentProfile) {
                                             try {
-                                                setRiengoUser(currentProfile, object.getString("email"));
+                                                MainActivity.riengoUser.addFacebook(currentProfile, object.getString("email"));
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
-                                            new CreateUserOperation().execute();
+                                            try {
+                                                new CreateUserOperation().execute().get();
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            } catch (ExecutionException e) {
+                                                e.printStackTrace();
+                                            }
+                                            storeSession();
                                             updateUI();
                                             Toast.makeText(getApplicationContext(),
                                                     "successfully logged in as "
                                                             + currentProfile.getFirstName(),
                                                     Toast.LENGTH_SHORT).show();
                                             profileTracker.stopTracking();
-                                            Log.v("Facebook - profile", riengoUser.getUserName());
-                                            Log.v("Facebook - id", riengoUser.getFbId());
-                                            Log.v("Facebook - Email", riengoUser.getUserEmail());
                                         }
                                     };
                                 } else {
                                     Profile profile = Profile.getCurrentProfile();
                                     try {
-                                        setRiengoUser(profile, object.getString("email"));
+                                        MainActivity.riengoUser.addFacebook(profile, object.getString("email"));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    new CreateUserOperation().execute();
+                                    try {
+                                        new CreateUserOperation().execute().get();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } catch (ExecutionException e) {
+                                        e.printStackTrace();
+                                    }
+                                    storeSession();
                                     updateUI();
                                     Toast.makeText(getApplicationContext(),
-                                            "successfully logged in as " + profile.getFirstName(),
+                                            "successfully logged in as "
+                                                    + profile.getFirstName(),
                                             Toast.LENGTH_SHORT).show();
-
-                                    Log.v("facebook - profile", riengoUser.getUserName());
-                                    Log.v("userId logueado FB2", riengoUser.getFbId());
-                                    Log.v("FB1 Email", riengoUser.getUserEmail());
                                 }
                             }
                         }
@@ -238,7 +292,7 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onError(FacebookException error) {
-
+                Toast.makeText(getApplicationContext(), "Error in login", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -253,13 +307,13 @@ public class MainActivity extends FragmentActivity {
 
     private void updateUI() {
         if (riengoUser.isFacebookOn()) {
-            Log.i("updateUI SET", "Aspen Log");
+            Log.i("Aspen Log", "updateUI Facebook");
             profilePictureView.setProfileId(riengoUser.getFbId());
             userNameView.setText(riengoUser.getUserName());
             userNameView.setVisibility(View.VISIBLE);
             profilePictureView.setVisibility(View.VISIBLE);
         } else {
-            Log.i("updateUI UnSET", "Aspen Log");
+            Log.i("Aspen Log", "updateUI Riengo");
             profilePictureView.setProfileId(null);
             userNameView.setText(MainActivity.riengoUser.getUserName());
         }
@@ -280,13 +334,6 @@ public class MainActivity extends FragmentActivity {
         startActivity(intent);
     }
 
-    private void setRiengoUser(Profile profile, String email) {
-        MainActivity.riengoUser.setFbId(profile.getId());
-        MainActivity.riengoUser.setUserName(profile.getFirstName()+ " "+profile.getLastName());
-        MainActivity.riengoUser.setUserEmail(email);
-        MainActivity.riengoUser.setFacebookOn(true);
-    }
-
     private class CreateUserOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -295,43 +342,14 @@ public class MainActivity extends FragmentActivity {
                 result = APISDK.createUser(riengoUser.getOneSignaluserId(),
                         riengoUser.getCurrentUser(),riengoUser.getUserEmail(),
                         riengoUser.getUserName());
-                Log.i("---->API SDK call", result);
+                Log.i("Aspen Log", "APISDK SAVED");
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return result;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
     }
-    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                   AccessToken currentAccessToken) {
-            Log.i("TokenChanged", "Aspen Log");
-            SharedPreferences sharedPref = getSharedPreferences("riengoPref",0);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.clear();
-            editor.putString("oneSignalUserId", MainActivity.riengoUser.getOneSignaluserId());
-            editor.commit();
-            if (currentAccessToken == null) {
-                Log.i("Facebook Logout", "Aspen Log");
-                MainActivity.riengoUser.reset();
-                updateUI();
-            }
-        }
-    };
 
     public class NotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
         // This fires when a notification is opened by tapping on it.
@@ -347,6 +365,32 @@ public class MainActivity extends FragmentActivity {
             intent.putExtra("bellName",bellName);
             startActivity(intent);
 
+        }
+    }
+
+    private class RegisterOnesignal extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String result = null;
+            OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+                @Override
+                public void idsAvailable(String userId, String registrationId) {
+                    if (!MainActivity.riengoUser.getOneSignaluserId().equals(userId)) {
+                        MainActivity.riengoUser = new RiengoUser(userId);
+                        try {
+                            new CreateUserOperation().execute().get();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        Log.i("Aspen Log", "idsAvailable" + MainActivity.riengoUser.toString());
+                        storeSession();
+                    }
+                }
+            });
+            return result;
         }
     }
 }

@@ -21,8 +21,8 @@ public class ShareBellActivity extends AppCompatActivity {
         String bell_name = intent.getStringExtra("bell_name");
         String short_URL = intent.getStringExtra("short_URL");
 
-        TextView bell_name_view = (TextView)findViewById(R.id.bell_name);
-        EditText short_URL_view = (EditText) findViewById(R.id.short_URL);
+        TextView bell_name_view = findViewById(R.id.bell_name);
+        TextView short_URL_view = findViewById(R.id.short_URL);
 
         bell_name_view.setText(bell_name);
         short_URL_view.setText(short_URL);

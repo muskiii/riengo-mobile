@@ -25,8 +25,8 @@ android {
         applicationId "com.riengo"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.22"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //yepes agregado

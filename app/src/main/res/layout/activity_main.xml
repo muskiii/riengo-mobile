@@ -10,6 +10,7 @@
 
     <LinearLayout
         xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/mainLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

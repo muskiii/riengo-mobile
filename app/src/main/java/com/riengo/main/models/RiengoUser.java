@@ -1,5 +1,8 @@
 package com.riengo.main.models;
 
+import com.facebook.Profile;
+import com.riengo.main.activities.MainActivity;
+
 /**
  * Created by aspen on 11/10/17.
  */
@@ -26,7 +29,9 @@ public final class RiengoUser {
     }
 
     public void setFbId(String fbId) {
+        this.currentUser = fbId;
         this.fbId = fbId;
+        this.facebookOn = true;
     }
 
     public String getOneSignaluserId() {
@@ -98,5 +103,10 @@ public final class RiengoUser {
         this.currentUser = oneSignaluserId;
         this.userEmail = "Aspen@Test";
         this.facebookOn = false;
+    }
+    public void addFacebook(Profile profile, String email) {
+        MainActivity.riengoUser.setFbId(profile.getId());
+        MainActivity.riengoUser.setUserName(profile.getFirstName()+ " "+profile.getLastName());
+        MainActivity.riengoUser.setUserEmail(email);
     }
 }

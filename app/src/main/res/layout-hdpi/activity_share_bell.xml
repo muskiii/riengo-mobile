@@ -63,11 +63,10 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
+        <TextView
             android:id="@+id/short_URL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />

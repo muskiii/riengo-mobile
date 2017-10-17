@@ -117,7 +117,6 @@ public class APISDK {
         String token = createJwtToken();
         URL url = new URL("https://riengo-api.herokuapp.com/v1/user");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        System.out.println("el token: "+token);
         try {
             urlConnection.setDoOutput(true);
             urlConnection.setChunkedStreamingMode(0);
@@ -128,7 +127,7 @@ public class APISDK {
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
             //email pushId facebookId name
             String params = "&pushId="+oneSignalId+"&mobileId="+cuerrentUser+"&name="+name+"&email="+email;
-            Log.i("debug",params);
+            Log.i("Aspen Log", "SAVED " + params);
             writeStream(out, params);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             return StreamUtils.readStream(in);
